@@ -178,7 +178,7 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">Navigation</li>
-                        <li><a href="{{route('admin.home')}}"><i class="mdi mdi-gauge"></i>Dashboard</a></li>
+                        <li><a href="{{route('admin.home.index')}}"><i class="mdi mdi-gauge"></i>Dashboard</a></li>
 
                         <li><a href="{{route('admin.sale.index')}}"><i class="mdi mdi-gauge"></i>Sales</a></li>
 
@@ -245,7 +245,7 @@
                     <h3 class="text-themecolor m-b-0 m-t-0">{{ $pageTitle }}</h3>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('admin.home')}}">Home</a>
+                                <a href="{{ route('admin.home.index')}}">Home</a>
                             </li>
                             <li class="breadcrumb-item active">{{ $pageTitle }}</li>
                         </ol>

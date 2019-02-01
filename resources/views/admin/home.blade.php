@@ -4,6 +4,28 @@
 <!-- Start Page Content -->
 <!-- ============================================================== -->
 <div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <form action="@if($commission){{{route('admin.home.update', $commission)}}}@else{{{route('admin.home.store')}}}@endif" method="POST">
+                    @csrf
+                    @if($commission)
+                       @method('PUT')
+                    @endif
+                    <label for="">Commission (%)</label>
+                        <div class="form-group">
+                            <input type="number" name="commission" class='form-control' value="{{@$commission->commission}}">
+                        </div>
+                        <input type="submit" value="Submit" class="btn btn-warning">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ============================================================== -->
+<div class="row">
     <!-- Column -->
     <div class="col-lg-3 col-md-6">
         <div class="card">

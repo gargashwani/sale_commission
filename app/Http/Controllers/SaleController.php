@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Sale;
 use App\Employee;
 use App\Saletype;
+use App\Commission;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -53,12 +54,15 @@ class SaleController extends Controller
             'dateofsale'=>'required'
         ]);
 
+        $commission = Commission::first();
+        // dd($commission->commission);
         $sale = Sale::create([
             'amount' => $request->amount,
             'jobnumber'=>$request->jobnumber,
             'dateofsale'=>$request->dateofsale,
             'employee_id'=>$request->employee_id,
-            'saletype_id'=>$request->saletype_id
+            'saletype_id'=>$request->saletype_id,
+            'commission' => ($request->amount)/100*$commission->commission
         ]);
 
         if($sale){
@@ -106,12 +110,14 @@ class SaleController extends Controller
             'dateofsale'=>'required'
         ]);
 
+        $commission = Commission::first();
+
         $sale->amount = $request->amount;
         $sale->jobnumber = $request->jobnumber;
         $sale->dateofsale = $request->dateofsale;
         $sale->employee_id = $request->employee_id;
         $sale->saletype_id = $request->saletype_id;
-
+        $sale->commission = ($request->amount)/100*$commission->commission;
         if($sale->save())
             return back()->with('message','Record Successfully Updated!');
         else

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use App\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,13 +18,47 @@ class HomeController extends Controller
     {
         $pageTitle = 'Dashboard';
         // $employees = Employee::all();
+        $commission = Commission::first();
+        // dd($commission);
         $totalEmployees = Employee::count();
         session(['totalEmployees' => $totalEmployees]);
-        return view('admin.home', compact('employees','pageTitle'));
+        return view('admin.home', compact('employees','pageTitle','commission'));
 
         // if (Auth::check()) {
         //     // The user is logged in...
         //     dd(Auth::user('user_role'));
         // }
+    }
+
+    public function store(Request $request){
+        // dd($request);
+        $validators = $request->validate([
+            'commission'=> 'required'
+        ]);
+
+        $commission = Commission::create([
+            'commission' => $request->commission
+        ]);
+
+        if ($commission) {
+            return back()->with('message','Commission added successfully!');
+        }else{
+            return back()->withErrors($validators);
+        }
+    }
+
+    public function update(Request $request, Commission $commission){
+        // dd($commission);
+        $validators = $request->validate([
+            'commission'=> 'required'
+        ]);
+        $commission = Commission::first();
+        $commission->commission = $request->commission;
+
+        if ($commission->save()) {
+            return back()->with('message','Commission updated successfully!');
+        }else{
+            return back()->withErrors($validators);
+        }
     }
 }

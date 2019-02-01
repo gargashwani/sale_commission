@@ -18,8 +18,6 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin'], function(){
-    Route::get('/home', 'HomeController@index')->name('home');
-
 
 	Route::get('employee/{employee}/remove','EmployeeController@remove')->name('employee.remove');
 	Route::get('employee/trash', 'EmployeeController@trash')->name('employee.trash');
@@ -33,6 +31,7 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin']
 	Route::get('sale/trash', 'SaleController@trash')->name('sale.trash');
     Route::get('sale/recover/{id}', 'SaleController@recoverSale')->name('sale.recover');
 
+	Route::resource('/home','HomeController');
 	Route::resource('/employee','EmployeeController');
 	Route::resource('/sale','SaleController');
 	Route::resource('/saletype','SaletypeController');

@@ -21,6 +21,7 @@ class CreateSalesTable extends Migration
             // $table->foreign('employee_id')->references('id')->on('employees');
             $table->unsignedInteger('jobnumber')->unique();;
             $table->unsignedInteger('amount');
+            $table->unsignedInteger('commission');
             $table->date('dateofsale');
             $table->softDeletes();
             $table->timestamps();

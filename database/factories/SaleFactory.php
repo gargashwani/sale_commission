@@ -20,6 +20,7 @@ $factory->define(App\Sale::class, function (Faker $faker) {
         'saletype_id' => $faker->numberBetween($min = 1, $max = 25),
         'jobnumber' => $faker->unique()->randomNumber($nbDigits = NULL, $strict = false),
         'dateofsale' => $faker->date($format = 'Y-m-d', $max = 'now'),
-        'amount' => $faker->numberBetween($min = 100, $max = 90000)
+        'amount' => $faker->numberBetween($min = 100, $max = 10000),
+        'commission' => $faker->numberBetween($min = 3, $max = 300),
     ];
 });

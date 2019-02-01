@@ -89,6 +89,7 @@
                                 <th>SaleType</th>
                                 <th>DOS</th>
                                 <th>Amount</th>
+                                <th>Commission</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -99,6 +100,7 @@
                                 <th>SaleType</th>
                                 <th>DOS</th>
                                 <th>Amount</th>
+                                <th>Commission</th>
                                 <th>Actions</th>
                             </tr>
                         </tfoot>
@@ -114,6 +116,7 @@
                                     {{-- Y-m-d Format --}}
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
                                     <td>{{ $sale->amount }}</td>
+                                    <td>{{ $sale->commission }}</td>
 
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}
