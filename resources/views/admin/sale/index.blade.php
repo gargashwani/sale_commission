@@ -120,7 +120,7 @@
 
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}
-
+<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#updatesale{{$sale->id}}" data-whatever="@mdo">Edit</button>
                                 <div class="modal fade" id="updatesale{{$sale->id}}" tabindex="-1" role="dialog" aria-labelledby="updatesale{{$sale->id}}Label1">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">

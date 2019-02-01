@@ -55,6 +55,12 @@ class SaleController extends Controller
         ]);
 
         $commission = Commission::first();
+        $comm = $commission->commission;
+        if(!$commission){
+            $comm = 0;
+        }else{
+            $comm = $commission->commission;
+        }
         // dd($commission->commission);
         $sale = Sale::create([
             'amount' => $request->amount,
@@ -62,7 +68,7 @@ class SaleController extends Controller
             'dateofsale'=>$request->dateofsale,
             'employee_id'=>$request->employee_id,
             'saletype_id'=>$request->saletype_id,
-            'commission' => ($request->amount)/100*$commission->commission
+            'commission' => ($request->amount)/100*$comm
         ]);
 
         if($sale){
@@ -112,12 +118,17 @@ class SaleController extends Controller
 
         $commission = Commission::first();
 
+        if(!$commission){
+            $comm = 0;
+        }else{
+            $comm = $commission->commission;
+        }
         $sale->amount = $request->amount;
         $sale->jobnumber = $request->jobnumber;
         $sale->dateofsale = $request->dateofsale;
         $sale->employee_id = $request->employee_id;
         $sale->saletype_id = $request->saletype_id;
-        $sale->commission = ($request->amount)/100*$commission->commission;
+        $sale->commission = ($request->amount)/100*$comm;
         if($sale->save())
             return back()->with('message','Record Successfully Updated!');
         else
