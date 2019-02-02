@@ -16,8 +16,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Sale::class, function (Faker $faker) {
     return [
-        'employee_id' => $faker->numberBetween($min = 1, $max = 20),
-        'saletype_id' => $faker->numberBetween($min = 1, $max = 25),
+        'employee_id' => $faker->numberBetween($min = 1, $max = 5),
+        'saletype_id' => $faker->numberBetween($min = 1, $max = 10),
         'jobnumber' => $faker->unique()->randomNumber($nbDigits = NULL, $strict = false),
         'dateofsale' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'amount' => $faker->numberBetween($min = 100, $max = 10000),

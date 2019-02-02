@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Sale;
 use App\Employee;
 use App\Commission;
 use Illuminate\Http\Request;
@@ -21,8 +22,12 @@ class HomeController extends Controller
         $commission = Commission::first();
         // dd($commission);
         $totalEmployees = Employee::count();
+        $totalSaleAmount = Sale::sum('amount');
+        $totalCommission = Sale::sum('commission');
+        $totalSales = Sale::count();
         session(['totalEmployees' => $totalEmployees]);
-        return view('admin.home', compact('employees','pageTitle','commission'));
+        return view('admin.home',
+        compact('totalEmployees','pageTitle','commission','totalSaleAmount','totalSales','totalCommission'));
 
         // if (Auth::check()) {
         //     // The user is logged in...

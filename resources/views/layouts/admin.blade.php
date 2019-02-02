@@ -387,8 +387,15 @@
         //     ]
         // });
         $('#myTable').DataTable({
-            "order": [[ 1, "desc" ]],
-                    dom: '<"top"Bf>rt<"bottom"lip><"clear">',
+            "columnDefs" : [{"targets":3, "type":"date-eu"}],
+            // columnDefs : [
+            //         { type: 'time-date-sort',
+            //         targets: [3],
+            //     }
+            // ],
+
+        "order": [[ 0, "desc" ]],
+        dom: '<"top"Bf>rt<"bottom"lip><"clear">',
         // dom: 'Bfrtip',
         lengthMenu: [
             [ 10, 25, 50,100, -1 ],

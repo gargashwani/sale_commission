@@ -3,22 +3,22 @@
 <!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Simple Toastr Alerts</h4>
-                                <h6 class="card-subtitle">You can use four different alert <code>info, warning, success, and error</code> message.</h6>
-                                <div class="button-box">
-                                    <button class="tst1 btn btn-info">Info Message</button>
-                                    <button class="tst2 btn btn-warning">Warning Message</button>
-                                    <button class="tst3 btn btn-success">Success Message</button>
-                                    <button class="tst4 btn btn-danger">Danger Message</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{-- <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Simple Toastr Alerts</h4>
+                <h6 class="card-subtitle">You can use four different alert <code>info, warning, success, and error</code> message.</h6>
+                <div class="button-box">
+                    <button class="tst1 btn btn-info">Info Message</button>
+                    <button class="tst2 btn btn-warning">Warning Message</button>
+                    <button class="tst3 btn btn-success">Success Message</button>
+                    <button class="tst4 btn btn-danger">Danger Message</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -73,13 +73,60 @@
         </div>
     </div>
 </div>
+<div class="card card-body">
+
+    <form action="{{route('admin.sale.getrange')}}" method="POST">
+        @csrf
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <div class="switch">
+                        <label>Select Date Range
+                            <input type="checkbox" name="rangeselector" id="rangeselector" checked>
+                            <span class="lever"></span>All</label>
+                    </div>
+                    <input type="text" id="showRangeSelector" class="form-control daterange float-right" name="range"
+                    style="display:none;">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="">Select Employee</label>
+                    <select name="employee_id" id="" class="form-control" required="TRUE">
+                        <option value="all" selected>All selected</option>
+                        @foreach ($employees as $employee)
+                            <option value="{{$employee->id}}">{{$employee->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-2">
+                <label for="">Sale Type</label>
+                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                    <option value="all" selected>All selected</option>
+                    @foreach ($saletypes as $saletype)
+                        <option value="{{$saletype->id}}">{{$saletype->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label for="">Sort Data</label>
+                    <input type="submit" class="btn btn-warning" value="Get Feed">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div class="row">
     <div class="col-12">
+
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Manage sales</h4>
-                <h6 class="card-subtitle float-left">Export data to Copy, CSV, Excel, PDF & Print</h6>
+                <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6>
+
                 <div class="table-responsive m-t-40">
                     <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
@@ -111,8 +158,8 @@
                             @foreach ($sales as $sale)
                                 <tr>
                                     <td>{{ $sale->jobnumber }}</td>
-                                    <td>{{ $sale->employee->name }}</td>
-                                    <td>{{ $sale->saletype->name }}</td>
+                                    <td>{{ @$sale->employee->name }}</td>
+                                    <td>{{ @$sale->saletype->name }}</td>
                                     {{-- Y-m-d Format --}}
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
                                     <td>{{ $sale->amount }}</td>
@@ -137,7 +184,7 @@
                                         <div class="form-group">
                                             <label for="">* Select Employee</label><br>
                                             <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                <option value="{{$sale->employee->id}}" selected>{{$sale->employee->name}}</option>
+                                                <option value="{{@$sale->employee->id}}" selected>{{@$sale->employee->name}}</option>
                                                 @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}">{{$employee->name}}</option>
                                                 @endforeach
@@ -147,7 +194,8 @@
                                     <div class="col-4">
                                         <label for="">* Sale Type</label><br>
                                         <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
-                                            <option value="{{$sale->saletype->id}}" selected>{{$sale->saletype->name}}</option>
+                                            <option value="{{@$sale->saletype->id}}"selected>
+                                                {{@$sale->saletype->name}}</option>
                                             @foreach ($saletypes as $saletype)
                                                 <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                                             @endforeach
@@ -214,10 +262,19 @@
 @section('scripts')
 <script type="text/javascript">
 function confirmDelete(id){
-let choice = confirm("Are You sure, You want to Delete this record ?")
-if(choice){
-document.getElementById('delete-sale-'+id).submit();
+    let choice = confirm("Are You sure, You want to Delete this record ?")
+    if(choice){
+        document.getElementById('delete-sale-'+id).submit();
+    }
 }
-}
+</script>
+
+
+<script>
+$(document).ready( function () {
+    $('#rangeselector').change(function(){
+        $('#showRangeSelector').toggle();
+    });
+});
 </script>
 @endsection

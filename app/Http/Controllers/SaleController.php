@@ -23,10 +23,56 @@ class SaleController extends Controller
            ->orderBy('id', 'desc')
            ->get();
         $saletypes = Saletype::where(['deleted_at'=>NULL])
-           ->orderBy('name', 'desc')
+           ->orderBy('id', 'desc')
            ->get();
         // dd($saletypes);
         return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'));
+    }
+
+    public function getrange(Request $request){
+        // dump($request->employee_id);
+        // dump($request->saletype_id);
+        // dump($request->range);
+        // dump($request->rangeselector);
+
+
+        // dump($date1);
+        // dump($date2);
+
+        // $sales = Sale::whereBetween('dateofsale', [$date1, $date2])->get();;
+
+        $query = Sale::query();
+
+        $query->when(request('employee_id') != 'all', function ($q) {
+            return $q->where('employee_id', request('employee_id'));
+        });
+
+        $query->when(request('saletype_id') != 'all', function ($q) {
+            return $q->where('saletype_id', request('saletype_id'));
+        });
+
+        $query->when(request('rangeselector') != 'on', function ($q) {
+            $date = explode(" ", request('range'));
+            $date1 = date('Y-m-d', strtotime($date[0]));
+            $date2 = date('Y-m-d', strtotime($date[2]));
+            return $q->whereBetween('dateofsale', [ $date1, $date2]);
+        });
+        // $query->when(request('filter_by') == 'date', function ($q) {
+        //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
+        // });
+        $sales = $query->get();
+        // dd($sales);
+
+        $pageTitle = 'Sales';
+        $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        $saletypes = Saletype::where(['deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        // dd($saletypes);
+        return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'));
+
     }
 
     /**
@@ -55,8 +101,9 @@ class SaleController extends Controller
         ]);
 
         $commission = Commission::first();
-        $comm = $commission->commission;
-        if(!$commission){
+        // dump($commission );
+
+        if($commission == NULL){
             $comm = 0;
         }else{
             $comm = $commission->commission;

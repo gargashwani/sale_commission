@@ -25,7 +25,7 @@ $factory->define(App\Employee::class, function (Faker $faker) {
         'status' => '1',
         'city' => $faker->city,
         'state' => $faker->state,
-        'country' => $faker->country,
+        'country' => $faker->streetAddress,
         'postcode' => $faker->postcode,
         'phone' => $faker->e164PhoneNumber
     ];

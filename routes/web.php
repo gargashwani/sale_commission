@@ -31,6 +31,8 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin']
 	Route::get('sale/trash', 'SaleController@trash')->name('sale.trash');
     Route::get('sale/recover/{id}', 'SaleController@recoverSale')->name('sale.recover');
 
+    Route::post('sale/getrange', 'SaleController@getrange')->name('sale.getrange');
+
 	Route::resource('/home','HomeController');
 	Route::resource('/employee','EmployeeController');
 	Route::resource('/sale','SaleController');
