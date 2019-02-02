@@ -73,8 +73,8 @@
         </div>
     </div>
 </div>
+{{--  Sort Data Starts --}}
 <div class="card card-body">
-
     <form action="{{route('admin.sale.getrange')}}" method="POST">
         @csrf
         <div class="row">
@@ -118,7 +118,9 @@
         </div>
     </form>
 </div>
+{{-- Sort Data ends --}}
 
+{{-- table starts here --}}
 <div class="row">
     <div class="col-12">
 
@@ -260,6 +262,9 @@
 @endsection
 
 @section('scripts')
+
+@include('api.datatable-init')
+
 <script type="text/javascript">
 function confirmDelete(id){
     let choice = confirm("Are You sure, You want to Delete this record ?")
@@ -269,12 +274,4 @@ function confirmDelete(id){
 }
 </script>
 
-
-<script>
-$(document).ready( function () {
-    $('#rangeselector').change(function(){
-        $('#showRangeSelector').toggle();
-    });
-});
-</script>
 @endsection

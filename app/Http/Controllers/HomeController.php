@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Sale;
 use App\Employee;
+use App\Saletype;
 use App\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,13 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $pageTitle = 'Dashboard';
-        // $employees = Employee::all();
+        $sales = Sale::all();
+        $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        $saletypes = Saletype::where(['deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
         $commission = Commission::first();
         // dd($commission);
         $totalEmployees = Employee::count();
@@ -27,7 +34,8 @@ class HomeController extends Controller
         $totalSales = Sale::count();
         session(['totalEmployees' => $totalEmployees]);
         return view('admin.home',
-        compact('totalEmployees','pageTitle','commission','totalSaleAmount','totalSales','totalCommission'));
+        compact('totalEmployees','pageTitle','commission','totalSaleAmount','totalSales','totalCommission',
+                'employees','saletypes'));
 
         // if (Auth::check()) {
         //     // The user is logged in...

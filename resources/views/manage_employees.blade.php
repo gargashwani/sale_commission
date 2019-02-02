@@ -270,12 +270,15 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript">
-function confirmDelete(id){
-let choice = confirm("Are You sure, You want to Delete this record ?")
-if(choice){
-document.getElementById('delete-employee-'+id).submit();
-}
-}
-</script>
+
+    @include('api.datatable-init')
+
+    <script type="text/javascript">
+    function confirmDelete(id){
+    let choice = confirm("Are You sure, You want to Delete this record ?")
+    if(choice){
+    document.getElementById('delete-employee-'+id).submit();
+    }
+    }
+    </script>
 @endsection

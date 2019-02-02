@@ -156,7 +156,7 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
-        // dd($request);
+        // dump($request);
         $validators = $request->validate([
             'amount'=>'integer|required',
             'jobnumber' => 'required|unique:sales,jobnumber,'.$sale->jobnumber.',jobnumber',
@@ -164,20 +164,26 @@ class SaleController extends Controller
         ]);
 
         $commission = Commission::first();
-
+        // dd($commission);
         if(!$commission){
             $comm = 0;
         }else{
             $comm = $commission->commission;
         }
+
         $sale->amount = $request->amount;
         $sale->jobnumber = $request->jobnumber;
         $sale->dateofsale = $request->dateofsale;
         $sale->employee_id = $request->employee_id;
         $sale->saletype_id = $request->saletype_id;
         $sale->commission = ($request->amount)/100*$comm;
+
         if($sale->save())
-            return back()->with('message','Record Successfully Updated!');
+            return redirect(route('admin.sale.index'))
+            ->with(['sales','pageTitle','employees','saletypes'])
+            ->with('message','Record Successfully Updated!');
+
+            // return back()->with('message','Record Successfully Updated!');
         else
             return back()->with('message', 'Error Updating Category');
     }
@@ -192,7 +198,10 @@ class SaleController extends Controller
     {
         // this method deletes the record from the database permanently
         if($sale->forceDelete()){
-            return back()->with('message','Record Successfully Deleted!');
+            return redirect(route('admin.sale.index'))
+            ->with(['sales','pageTitle','employees','saletypes'])
+            ->with('message','Record Successfully Deleted!');
+            // return back()->with('message','Record Successfully Deleted!');
         }else{
             return back()->with('message','Error Deleting Record');
         }

@@ -151,6 +151,7 @@
 <!-- End PAge Content -->
 <!-- ============================================================== -->
 @endsection
+@include('api.datatable-init')
 
 @section('scripts')
 <script type="text/javascript">
