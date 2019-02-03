@@ -166,9 +166,9 @@
                                     <td>{{ @$sale->saletype->name }}</td>
                                     {{-- Y-m-d Format --}}
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
-                                    <td>{{ $sale->amount }}</td>
-                                    <td>{{ $sale->commission }}</td>
-                                    <td>{{ $sale->amount - $sale->commission }}</td>
+                                    <td>{{ number_format($sale->amount) }}</td>
+                                    <td>{{ number_format($sale->commission) }}</td>
+                                    <td>{{ number_format($sale->amount - $sale->commission) }}</td>
 
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}

@@ -12,7 +12,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{$alltimeSaleAmount}}</h3>
+                        <h3 class="m-b-0 font-lgiht">$ {{ number_format($alltimeSaleAmount)}}</h3>
                         <h5 class="text-muted m-b-0">Total Sale Amount</h5></div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-light">$ {{$alltimeSaleAmount - $alltimeCommission}}</h3>
+                        <h3 class="m-b-0 font-light">$ {{number_format($alltimeSaleAmount - $alltimeCommission)}}</h3>
                         <h5 class="text-muted m-b-0">Total Revenue</h5></div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">{{$alltimeCommission}}</h3>
+                        <h3 class="m-b-0 font-lgiht">$ {{number_format($alltimeCommission)}}</h3>
                         <h5 class="text-muted m-b-0">Total Commission</h5></div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-cart-outline"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">{{$alltimeSales}}</h3>
+                        <h3 class="m-b-0 font-lgiht">{{number_format($alltimeSales)}}</h3>
                         <h5 class="text-muted m-b-0"># Total Sales</h5></div>
                 </div>
             </div>
@@ -202,7 +202,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{$totalSaleAmount}}</h3>
+                        <h3 class="m-b-0 font-lgiht">$ {{number_format($totalSaleAmount)}}</h3>
                         <h5 class="text-muted m-b-0">Sale Amount</h5></div>
                 </div>
             </div>
@@ -217,7 +217,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-light">$ {{$totalSaleAmount - $totalCommission}}</h3>
+                        <h3 class="m-b-0 font-light">$ {{number_format($totalSaleAmount - $totalCommission)}}</h3>
                         <h5 class="text-muted m-b-0">Revenue</h5></div>
                 </div>
             </div>
@@ -232,7 +232,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">{{$totalCommission}}</h3>
+                        <h3 class="m-b-0 font-lgiht">$ {{number_format($totalCommission)}}</h3>
                         <h5 class="text-muted m-b-0">Commission</h5></div>
                 </div>
             </div>
@@ -247,7 +247,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-cart-outline"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">{{$totalSales}}</h3>
+                        <h3 class="m-b-0 font-lgiht">{{number_format($totalSales)}}</h3>
                         <h5 class="text-muted m-b-0"># Sales</h5></div>
                 </div>
             </div>
