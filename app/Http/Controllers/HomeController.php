@@ -33,6 +33,9 @@ class HomeController extends Controller
         $commission = Commission::first();
         // dd($commission);
         $totalEmployees = Employee::where(['status'=> 1,'deleted_at'=>NULL])->count();
+        $alltimeSaleAmount = Sale::sum('amount');
+        $alltimeCommission = Sale::sum('commission');
+        $alltimeSales = Sale::count();
 
 
         // dd($request->rangeselector);
@@ -60,9 +63,17 @@ class HomeController extends Controller
         // }
 
         $allTime = 'on';
-        if(@$request->alltimeselector == null){
+        // dump($request->alltimeselector);
+        $alltimeselector = $request->alltimeselector;
+        if($request->alltimeselector == 'on'){
+            $allTime = 'on';
+            // dump($allTime);
+        }elseif($request->alltimeselector == 0){
             $allTime = null;
-
+        }
+        // dump($allTime);
+        if($request->alltimeselector != 'on'){
+            // dump($request->rangeselector);
             if($request->rangeselector != 'on'){
                 // dump($request->selectDataYear);
                 if($request->selectDataYear != null){
@@ -219,7 +230,8 @@ class HomeController extends Controller
                 ,'totalSales','totalCommission','employees','saletypes'
                 ,'salePerMonth','chartjs','selectedYear','selectedDataYear',
             'selectedEmployee','selectedQuarter','selectedSaletype','rangeDataSelector'
-            ,'fromDate','toDate','dateRange','alltimeselector','allTime'));
+            ,'fromDate','toDate','dateRange','alltimeselector','allTime',
+            'alltimeSaleAmount','alltimeCommission','alltimeSales'));
     }
 
     public function getrange(Request $request){

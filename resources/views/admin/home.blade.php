@@ -3,6 +3,70 @@
 <!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
+{{-- Total data --}}
+<div class="row">
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">$ {{$alltimeSaleAmount}}</h3>
+                        <h5 class="text-muted m-b-0">Total Sale Amount</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-light">$ {{$alltimeSaleAmount - $alltimeCommission}}</h3>
+                        <h5 class="text-muted m-b-0">Total Revenue</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">{{$alltimeCommission}}</h3>
+                        <h5 class="text-muted m-b-0">Total Commission</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-cart-outline"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">{{$alltimeSales}}</h3>
+                        <h5 class="text-muted m-b-0"># Total Sales</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+</div>
+{{-- total data ends****************************** --}}
 <div class="row">
 <div class="col-12">
 {{--  Sort Data Starts --}}
@@ -11,25 +75,24 @@
 <div class="card-body">
     <form action="{{route('admin.home.getrange')}}" method="POST">
         @csrf
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-12">
-        <div class="switch">
-            {{@$allTime}}
-            <label><b>All Time</b> ->
-                <input type="checkbox" name="alltimeselector" id="alltimeselector"
-                @if(@$allTime == 'on')
-                checked
-                @endif
-                >
-                Off<span class="lever"></span>On</label>
-                 [ Note: <b>Getting default data</b > - For all time, for all employees and for sale types, You can off it for sorting!]
-        </div>
+                {{$allTime}}
+                <div class="switch">
+                    <label><b>All Time</b> ->
+                        <input type="checkbox" name="alltimeselector" id="alltimeselector"
+                        @if($allTime == 'on')
+                        checked
+                        @endif
+                        >
+                        Off<span class="lever"></span>On</label>
+                </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-3">
-                <div class="form-group" style="display:none;" id="dateRangeCol">
+                <div class="form-group" >
                     <div class="switch">
                         {{-- {{@$rangeDataSelector}} --}}
                         <label>Select Date Range -
@@ -53,7 +116,7 @@
 
             <div class="col-3">
 
-                <div class="form-group" id="yearQuarter" style="display:none;">
+                <div class="form-group" id="yearQuarter" >
                     <div class="switch">
                         <label>Select Quarters
                             <input type="checkbox" id="quarterselector" name="quarterselector"
@@ -126,9 +189,11 @@
 
 <!-- ==================== TOTAL DATA STARTS ============================ -->
 <br>
+
 @if(@$rangeDataSelector == 'on')
-    For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$toDate))}}
+For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$toDate))}}
 @endif
+<span><b>Default data</b > - For current year, for all employees and for all sale types, You can off it for sorting!</span>
 <div class="row">
     <!-- Column -->
     <div class="col-lg-3 col-md-6">
@@ -285,10 +350,6 @@
             $('#yearQuarter').toggle();
         })
 
-        @if(@$allTime == null)
-            $('#dateRangeCol').show();
-            $('#yearQuarter').show();
-        @endif
     });
 
     $(document).ready(function(){
