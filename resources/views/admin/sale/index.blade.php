@@ -78,23 +78,99 @@
     <form action="{{route('admin.sale.getrange')}}" method="POST">
         @csrf
         <div class="row">
-            <div class="col-3">
-                <div class="form-group">
+            <div class="col-2">
+                <div class="form-group" id="showRange">
                     <div class="switch">
-                        <label>Select Date Range
-                            <input type="checkbox" name="rangeselector" id="rangeselector" checked>
+                        <label>Range
+                            <input type="checkbox" name="rangeselector" id="rangeselector"
+                            @if(@$rangeselector != 'on')
+
+                            @else
+                            checked
+                            @endif
+                            >
                             <span class="lever"></span>All</label>
                     </div>
                     <input type="text" id="showRangeSelector" class="form-control daterange float-right" name="range"
+                    @if(@$range != 'on')
+                        style="display:block;"
+                        value="{{@$range}}"
+                    @endif
                     style="display:none;">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group" id="weekly">
+                    <div class="switch">
+                        <label>Weekly
+                            <input type="checkbox" name="showweekdata" id="weekdata"
+                            @if(@$showweekdata == 'on')
+                                checked
+                            @endif
+                            >
+                            Off<span class="lever"></span>On</label>
+                    </div>
+                    <select name="weekdata" id="showweekdata"
+                    @if(@$showweekdata == 'on')
+                        style="display:block;"
+                    @else
+                        style="display:none;"
+                    @endif
+                    >
+                        <option  @if(@$weektype == null) selected @endif>Select Week</option>
+                        <option value="thisweek" @if(@$weektype == 'thisweek') selected @endif>This Week</option>
+                        <option value="lastweek" @if(@$weektype == 'lastweek') selected @endif>Last Week</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+
+                <div class="form-group" id="yearQuarter" >
+                    <div class="switch">
+                        <label>Quarterly
+                            <input type="checkbox" id="quarterselector" name="quarterselector"
+                            @if(@$selectedQuarter == 'on')
+                                checked
+                            @endif
+                            >
+                            Off<span class="lever"></span>On
+                        </label>
+                    </div>
+
+                    <div id="showQuarterly"
+                        @if(@$selectedQuarter == 'on')
+                            style="display:block;"
+                        @endif
+                        style="display:none;"
+                    >
+                        <select name="selectDataYear" id="selectYear" >
+                            @for($i = 2010;$i<2099;$i++)
+                                @if($i == @ $selectedDataYear)
+                                    <option selected value="{{@ $selectedDataYear}}">
+                                        {{@ $selectedDataYear}}
+                                    </option>
+                                @endif
+                                <option value="{{$i}}" >{{$i}}</option>
+                            @endfor
+                        </select>
+                        <select name="selectDataQurater" id="showQuraters">
+                            <option value="q1" @if(@$selectedDataQuarter == 'q1')selected @endif>Quarter 1</option>
+                            <option value="q2" @if(@$selectedDataQuarter == 'q2')selected @endif>Quarter 2</option>
+                            <option value="q3" @if(@$selectedDataQuarter == 'q3')selected @endif>Quarter 3</option>
+                            <option value="q4" @if(@$selectedDataQuarter == 'q4')selected @endif>Quarter 4</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="form-group">
                     <label for="">Select Employee</label>
-                    <select name="employee_id" id="" class="form-control" required="TRUE">
-                        <option value="all" selected>All selected</option>
+                    <select name="employee_id" id="" class="" required="TRUE">
+                        <option value="all" >All</option>
                         @foreach ($employees as $employee)
+                            @if(@$employee_id == $employee->id)
+                                <option value="{{@$employee_id}}" selected>{{$employee->name}}</option>
+                            @endif
                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                         @endforeach
                     </select>
@@ -102,19 +178,22 @@
             </div>
             <div class="col-2">
                 <label for="">Sale Type</label>
-                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                <select name="saletype_id" id="saletype_id" class="" required="TRUE">
                     <option value="all" selected>All selected</option>
                     @foreach ($saletypes as $saletype)
+                        @if(@$saletype_id == $saletype->id)
+                            <option value="{{@$saletype_id}}" selected>{{$saletype->name}}</option>
+                        @endif
                         <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-2">
-                <div class="form-group">
-                    <label for="">Sort Data</label>
-                    <input type="submit" class="btn btn-warning" value="Get Feed">
-                </div>
+
+
+            <div class="col-2 form-group">
+                <input type="submit" class="btn btn-warning btn-sm" value="Get Feed">
             </div>
+
         </div>
     </form>
 </div>
@@ -273,6 +352,29 @@
         $('#rangeselector').change(function(){
             $('#showRangeSelector').toggle();
         });
+
+        $('#weekdata').change(()=>{
+            $('#showweekdata').toggle();
+            $('#showRange').toggle();
+            $('#yearQuarter').toggle();
+        });
+
+        $('#quarterselector').change(() =>{
+            $('#showRange').toggle();
+            $('#weekly').toggle();
+            $('#showQuarterly').toggle();
+        });
+
+        @if(@$showweekdata == 'on')
+            $('#showweekdata').show();
+            $('#showRange').hide();
+            $('#yearQuarter').hide();
+        @endif
+
+        @if(@$selectedQuarter == 'on')
+            $('#weekly').hide();
+            $('#showRange').hide();
+        @endif
     });
 </script>
 
