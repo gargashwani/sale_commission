@@ -137,8 +137,9 @@
                                 <th>Employee</th>
                                 <th>SaleType</th>
                                 <th>DOS</th>
-                                <th>Amount</th>
+                                <th>Sale</th>
                                 <th>Commission</th>
+                                <th>Revenue</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -148,8 +149,9 @@
                                 <th>Employee</th>
                                 <th>SaleType</th>
                                 <th>DOS</th>
-                                <th>Amount</th>
+                                <th>Sale</th>
                                 <th>Commission</th>
+                                <th>Revenue</th>
                                 <th>Actions</th>
                             </tr>
                         </tfoot>
@@ -166,6 +168,7 @@
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
                                     <td>{{ $sale->amount }}</td>
                                     <td>{{ $sale->commission }}</td>
+                                    <td>{{ $sale->amount - $sale->commission }}</td>
 
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}
@@ -264,6 +267,14 @@
 @section('scripts')
 
 @include('api.datatable-init')
+
+<script>
+    $(document).ready( function () {
+        $('#rangeselector').change(function(){
+            $('#showRangeSelector').toggle();
+        });
+    });
+</script>
 
 <script type="text/javascript">
 function confirmDelete(id){

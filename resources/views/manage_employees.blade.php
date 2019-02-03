@@ -55,13 +55,34 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="phone" class="control-label">Phone:</label>
                                                     <input type="text" class="form-control" id="phone" name="phone">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="color" class="control-label">BG Graph</label>
+                                                    <div class="asColorPicker-wrap">
+                                                        <input type="text" name="bgcolor" class="gradient-colorpicker form-control asColorPicker-input"  value="#343412">
+                                                        <a href="#" class="asColorPicker-clear"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="color" class="control-label">Border Graph</label>
+                                                    <div class="asColorPicker-wrap">
+                                                        <input type="text" name="bordercolor" class="gradient-colorpicker form-control asColorPicker-input"   value="#343452">
+                                                        <a href="#" class="asColorPicker-clear"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="postcode" class="control-label">PostCode:</label>
                                                     <input type="text" class="form-control" id="postcode" name="postcode">
@@ -130,7 +151,7 @@
                             @endphp
                             @foreach ($employees as $employee)
                                 <tr>
-                                    <td>{{ $i }}</td>
+                                    <td style="background-color:{{$employee->bgcolor}}; color:white">{{ $i }}</td>
                                     <td>{{ $employee->name }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone }}</td>
@@ -185,13 +206,31 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="phone" class="control-label">Phone:</label><br>
                                                     <input type="text" class="form-control" id="phone" name="phone" value="{{ $employee->phone }}">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="color" class="control-label">BG Graph</label><br>
+                                                    <div class="asColorPicker-wrap">
+                                                        <input type="text" name="bgcolor" class="gradient-colorpicker form-control asColorPicker-input"  value="{{ $employee->bgcolor }}">
+                                                        <a href="#" class="asColorPicker-clear"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="color" class="control-label">Border Graph</label><br>
+                                                    <div class="asColorPicker-wrap">
+                                                        <input type="text" name="bordercolor" class="gradient-colorpicker form-control asColorPicker-input"  value="{{ $employee->bordercolor }}">
+                                                        <a href="#" class="asColorPicker-clear"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="postcode" class="control-label">PostCode:</label><br>
                                                     <input type="text" class="form-control" id="postcode" name="postcode" value="{{ $employee->postcode }}">

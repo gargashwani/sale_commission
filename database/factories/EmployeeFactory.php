@@ -27,6 +27,8 @@ $factory->define(App\Employee::class, function (Faker $faker) {
         'state' => $faker->state,
         'country' => $faker->streetAddress,
         'postcode' => $faker->postcode,
-        'phone' => $faker->e164PhoneNumber
+        'phone' => $faker->e164PhoneNumber,
+        'bgcolor' => $faker->hexcolor,
+        'bordercolor' => $faker->hexcolor,
     ];
 });

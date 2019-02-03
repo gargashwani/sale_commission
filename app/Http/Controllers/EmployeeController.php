@@ -72,6 +72,8 @@ class EmployeeController extends Controller
             'postcode' => $request->postcode,
             'city' => $request->city,
             'state' => $request->state,
+            'bgcolor' => $request->bgcolor,
+            'bordercolor' => $request->bordercolor,
             'country' => $request->country,
             'status' => '1'
         ]);
@@ -123,6 +125,8 @@ class EmployeeController extends Controller
         $employee->city = $request->city;
         $employee->state = $request->state;
         $employee->country = $request->country;
+        $employee->bgcolor = $request->bgcolor;
+        $employee->bordercolor = $request->bordercolor;
         if ($request->status == 'on') {
             $employee->status = '1';
         }else{

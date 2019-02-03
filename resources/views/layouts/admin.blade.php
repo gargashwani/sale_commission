@@ -255,9 +255,9 @@
                             <div class="d-flex m-r-20 m-l-10 hidden-md-down">
                                 <div class="chart-text m-r-10">
                                     <h6 class="m-b-0">
-                                        <small>THIS MONTH</small>
+                                        <small>THIS MONTH SALE</small>
                                     </h6>
-                                    <h4 class="m-t-0 text-info">$58,356</h4>
+                                    <h4 class="m-t-0 text-info">${{Session('thisMonthAmount')}}</h4>
                                 </div>
                                 <div class="spark-chart">
                                     <div id="thismonthchart"></div>
@@ -266,9 +266,9 @@
                             <div class="d-flex m-r-20 m-l-10 hidden-md-down">
                                 <div class="chart-text m-r-10">
                                     <h6 class="m-b-0">
-                                        <small>LAST MONTH</small>
+                                        <small>LAST MONTH SALE</small>
                                     </h6>
-                                    <h4 class="m-t-0 text-primary">$48,356</h4>
+                                    <h4 class="m-t-0 text-primary">${{Session('lastMonthAmount')}}</h4>
                                 </div>
                                 <div class="spark-chart">
                                     <div id="lastmonthchart"></div>
@@ -356,6 +356,7 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
     <!-- end - This is for export functionality only -->
 
     <!-- ============================================================== -->
@@ -393,14 +394,18 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
 
+
+
     <script>
-        $(document).ready( function () {
-            $('#rangeselector').change(function(){
-                $('#showRangeSelector').toggle();
-            });
+        // Colorpicker
+        $(".colorpicker").asColorPicker();
+        $(".complex-colorpicker").asColorPicker({
+            mode: 'complex'
+        });
+        $(".gradient-colorpicker").asColorPicker({
+            mode: 'gradient'
         });
     </script>
-
 </body>
 
 </html>

@@ -32,6 +32,10 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin']
     Route::get('sale/recover/{id}', 'SaleController@recoverSale')->name('sale.recover');
 
     Route::post('sale/sortdata', 'SaleController@getrange')->name('sale.getrange');
+    Route::post('home/sortdata', 'HomeController@index')->name('home.getrange');
+
+    // On home.blade.php
+    Route::post('home/getdatabyyear', 'HomeController@index')->name('home.getdatabyyear');
 
 	Route::resource('/home','HomeController');
 	Route::resource('/employee','EmployeeController');

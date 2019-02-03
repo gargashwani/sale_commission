@@ -47,7 +47,7 @@
 
                 </div>
                 <div class="table-responsive m-t-40">
-                    <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                    <table id="saleTypeTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -151,15 +151,17 @@
 <!-- End PAge Content -->
 <!-- ============================================================== -->
 @endsection
-@include('api.datatable-init')
 
 @section('scripts')
-<script type="text/javascript">
-function confirmDelete(id){
-let choice = confirm("Are You sure, You want to Delete this record ?")
-if(choice){
-document.getElementById('delete-saletype-'+id).submit();
-}
-}
-</script>
+
+    @include('api.datatable-init')
+
+    <script type="text/javascript">
+    function confirmDelete(id){
+    let choice = confirm("Are You sure, You want to Delete this record ?")
+    if(choice){
+    document.getElementById('delete-saletype-'+id).submit();
+    }
+    }
+    </script>
 @endsection

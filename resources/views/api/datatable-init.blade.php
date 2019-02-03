@@ -7,27 +7,90 @@ $(document).ready(function(){
         //         'copy', 'csv', 'excel', 'pdf', 'print'
         //     ]
         // });
-        $('#myTable').DataTable({
-            "columnDefs" : [{"targets":3, "type":"date-eu"}],
-            // columnDefs : [
-            //         { type: 'time-date-sort',
-            //         targets: [3],
-            //     }
-            // ],
 
-        "order": [[ 0, "desc" ]],
-        dom: '<"top"Bf>rt<"bottom"lip><"clear">',
-        // dom: 'Bfrtip',
-        lengthMenu: [
-            [ 10, 25, 50,100, -1 ],
-            [ '10 rows', '25 rows', '50 rows','100 rows', 'Show all' ]
-        ],
 
+        // $('#myTable').DataTable({
+        //     "columnDefs" : [{"targets":3, "type":"date-eu"}],
+        //     "order": [[ 0, "desc" ]],
+        //     dom: '<"top"Bf>rt<"bottom"lip><"clear">',
+        //     // dom: 'Bfrtip',
+        //     lengthMenu: [
+        //         [ 10, 25, 50,100, -1 ],
+        //         [ '10 rows', '25 rows', '50 rows','100 rows', 'Show all' ]
+        //     ],
+        //     buttons: [
+        //         'copy', 'csv', 'excel', 'pdf', 'print','pageLength',
+        //         // exportOptions: {
+        //         //     columns: [ 0, 1, 2, 3 ]
+        //         // }
+        //     ]
+        // });
+
+    $('#saleTypeTable').DataTable( {
+        dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print','pageLength',
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    // columns: [ 0, ':visible' ]
+                    columns: [ 0, 1, 2]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    // columns: ':visible'
+                    columns: [ 0, 1, 2]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2]
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [ 0, 1, 2]
+                }
+            },
         ]
+    } );
 
-        });
+    $('#myTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    // columns: [ 0, ':visible' ]
+                    columns: [ 0, 1, 2, 3 ,4 ,5, 6]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    // columns: ':visible'
+                    columns: [ 0, 1, 2, 3 ,4 ,5, 6]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ,4 ,5, 6]
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ,4 ,5, 6]
+                }
+            },
+        ]
+    } );
+
+
 });
 </script>
 
