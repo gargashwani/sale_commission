@@ -61,6 +61,11 @@ class SaleController extends Controller
             $query->when(request('selectDataYear') != 'null', function ($q) {
                 return $q->whereYear('dateofsale', request('selectDataYear'));
             });
+
+            $query->when(request('selectDataQurater') == 'qAll', function ($q) {
+                return $q->whereIn(DB::raw('MONTH(dateofsale)'), [1,2,3,4,5,6,7,8,9,10,11,12]);
+            });
+
             $query->when(request('selectDataQurater') == 'q1', function ($q) {
                 return $q->whereIn(DB::raw('MONTH(dateofsale)'), [1,2,3]);
             });
@@ -134,7 +139,15 @@ class SaleController extends Controller
      */
     public function create()
     {
+        $pageTitle = 'Create Sale';
+        $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        $saletypes = Saletype::where(['deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
 
+        return view('admin.sale.create',compact('pageTitle','employees','saletypes'));
     }
 
     /**

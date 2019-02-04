@@ -1,80 +1,69 @@
 @extends('layouts.admin')
 @section('content')
-<!-- ============================================================== -->
-<!-- Start Page Content -->
-<!-- ============================================================== -->
-{{-- <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Simple Toastr Alerts</h4>
-                <h6 class="card-subtitle">You can use four different alert <code>info, warning, success, and error</code> message.</h6>
-                <div class="button-box">
-                    <button class="tst1 btn btn-info">Info Message</button>
-                    <button class="tst2 btn btn-warning">Warning Message</button>
-                    <button class="tst3 btn btn-success">Success Message</button>
-                    <button class="tst4 btn btn-danger">Danger Message</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">New Sale</h4>
-                {{-- <h6 class="card-subtitle">You can use four different alert <code>info, warning, success, and error</code> message.</h6> --}}
-                <div class="button-box">
-                    <form action="{{route('admin.sale.store')}}" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="">* Select Employee</label>
-                                    <select name="employee_id" id="" class="form-control" required="TRUE">
-                                        <option selected disabled>Select an employee</option>
-                                        @foreach ($employees as $employee)
-                                            <option value="{{$employee->id}}">{{$employee->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <label for="">* Sale Type</label>
-                                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
-                                    <option selected disabled>Select sale type</option>
-                                    @foreach ($saletypes as $saletype)
-                                        <option value="{{$saletype->id}}">{{$saletype->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <label for="">* Date of Sale</label>
-                                <input type="text" name="dateofsale" class="form-control " placeholder="2019-01-16" id="mdate" data-dtp="dtp_GJMLm" required>
-                            </div>
 
-                            <div class="col-2">
-                                <label for="">* Job Number</label>
-                                <input type="number" name="jobnumber" class="form-control" required placeholder="#">
-                            </div>
-                            <div class="col-2">
-                                <label for="">* Amount</label>
-                                <input type="number" name="amount" class="form-control" required>
-                            </div>
-                            <div class="col-1">
-                                <label for=""></label>
-                                <input type="submit" value="Submit" class="btn btn-info">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 {{--  Sort Data Starts --}}
 <div class="card card-body">
+{{-- ********* Add New Sale STARTS HERE********** --}}
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addsale" data-whatever="@mdo">Create Sale</button>
+                                <div class="modal fade" id="addsale" tabindex="-1" role="dialog" aria-labelledby="addsaleLabel1">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="addsaleLabel1">Create sale</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <form method="POST" action="{{route('admin.sale.store')}}">
+                            @csrf
+                                <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="">* Select Employee</label><br>
+                                            <select name="employee_id" id="" class="form-control" required="TRUE">
+                                                @foreach ($employees as $employee)
+                                                    <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="">* Sale Type</label><br>
+                                        <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                                            @foreach ($saletypes as $saletype)
+                                                <option value="{{$saletype->id}}">{{$saletype->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="">* Date of Sale</label><br>
+                                        <input type="date" name="dateofsale" class="form-control"   id="mdate" data-dtp="dtp_GJMLm" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="">* Job Number</label><br>
+                                        <input type="number" name="jobnumber" class="form-control" required >
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">* Amount</label><br>
+                                    <input type="number" name="amount" class="form-control" required >
+                                    </div>
+                                </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <input type="submit" class="btn btn-primary" value="Add New Sale">
+                                </div>
+                                </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.modal -->
+{{-- ********* ADD new sale ENDS HERE *********** --}}
+
+    <br>
     <form action="{{route('admin.sale.getrange')}}" method="POST">
         @csrf
         <div class="row">
@@ -154,6 +143,7 @@
                             @endfor
                         </select>
                         <select name="selectDataQurater" id="showQuraters">
+                            <option value="qAll" @if(@$selectedDataQuarter == 'qAll')selected @endif>All Quarters </option>
                             <option value="q1" @if(@$selectedDataQuarter == 'q1')selected @endif>Quarter 1</option>
                             <option value="q2" @if(@$selectedDataQuarter == 'q2')selected @endif>Quarter 2</option>
                             <option value="q3" @if(@$selectedDataQuarter == 'q3')selected @endif>Quarter 3</option>

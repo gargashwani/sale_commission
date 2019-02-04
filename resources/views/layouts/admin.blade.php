@@ -63,7 +63,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="#">
                         <!-- Logo icon -->
                         <b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -117,7 +117,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 <ul class="dropdown-user">
-                                    <li>
+                                    {{-- <li>
                                         <div class="dw-user-box">
                                             <div class="u-text">
                                                 <h4>Steave Jobs</h4>
@@ -125,25 +125,25 @@
                                                 <a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
                                             </div>
                                         </div>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
+                                    </li> --}}
+                                    {{-- <li role="separator" class="divider"></li> --}}
                                     <li>
                                         <a href="#">
                                             <i class="ti-user"></i> My Profile</a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="#">
                                             <i class="ti-wallet"></i> My Balance</a>
                                     </li>
                                     <li>
                                         <a href="#">
                                             <i class="ti-email"></i> Inbox</a>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
+                                    </li> --}}
+                                    {{-- <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="#">
                                             <i class="ti-settings"></i> Account Setting</a>
-                                    </li>
+                                    </li> --}}
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
@@ -178,9 +178,16 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">Navigation</li>
-                        <li><a href="{{route('admin.home.index')}}"><i class="mdi mdi-gauge"></i>Dashboard</a></li>
+                        <li><a class="waves-effect waves-dark" href="{{route('admin.home.index')}}"><i class="mdi mdi-gauge"></i> Dashboard</a></li>
 
-                        <li><a href="{{route('admin.sale.index')}}"><i class="mdi mdi-gauge"></i>Sales</a></li>
+                        {{-- <li><a href="{{route('admin.sale.index')}}"><i class="mdi mdi-gauge"></i>Sales</a></li> --}}
+                        <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
+                                    class="hide-menu">Sales </span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{route('admin.sale.create')}}">Create</a></li>
+                                <li><a href="{{route('admin.sale.index')}}">Manage</a></li>
+                            </ul>
+                        </li>
 
                         <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
                                     class="hide-menu">Employees </span></a>
@@ -208,13 +215,13 @@
             <!-- Bottom points-->
             <div class="sidebar-footer">
                 <!-- item-->
-                <a href="" class="link" data-toggle="tooltip" title="Settings">
+                {{-- <a href="" class="link" data-toggle="tooltip" title="Settings">
                     <i class="ti-settings"></i>
-                </a>
+                </a> --}}
                 <!-- item-->
-                <a href="" class="link" data-toggle="tooltip" title="Email">
+                {{-- <a href="" class="link" data-toggle="tooltip" title="Email">
                     <i class="mdi mdi-gmail"></i>
-                </a>
+                </a> --}}
                 <!-- item-->
                 <a class="link" data-toggle="tooltip" title="Logout" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
