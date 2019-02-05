@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
-    <title>Material Pro Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+    <title>Login</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Custom CSS -->
@@ -41,7 +41,7 @@
             <div class="card-body">
                 <form method="POST" action="{{ route('login') }}" class="form-horizontal form-material" id="loginform">
                 @csrf
-                    <a href="javascript:void(0)" class="text-center db"><img src="../assets/images/logo-icon.png" alt="Home" /><br/><img src="../assets/images/logo-text.png" alt="Home" /></a>
+                    <a href="javascript:void(0)" class="text-center db"><i class="mdi mdi-apps" style="color:#000; font-size:30px;"></i> <br> <h2>Sale Management</h2></a>
 
                         <div class="form-group m-t-40">
                             <div class="col-xs-12">
@@ -75,12 +75,12 @@
                                         {{ __('Remember Me') }}
                                     </label>
                             </div>
-                            <div class="ml-auto">
+                            {{-- <div class="ml-auto">
                                 @if (Route::has('password.request'))
                                 <a href="javascript:void(0)" id="to-recover" class="text-muted" href="{{ route('password.request') }}>
                                     <i class="fa fa-lock m-r-5"></i> {{ __('Forgot Your Password?') }}</a>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="form-group text-center m-t-20">

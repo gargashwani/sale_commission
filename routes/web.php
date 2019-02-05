@@ -35,7 +35,11 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin']
     Route::post('home/sortdata', 'HomeController@index')->name('home.getrange');
 
     // On home.blade.php
-    Route::post('home/getdatabyyear', 'HomeController@index')->name('home.getdatabyyear');
+    Route::PUT('home/getdatabyyear', 'HomeController@index')->name('home.getdatabyyear');
+
+    Route::get('/profile', 'ProfileController@index')->name('profile');
+    Route::PUT('/profile', 'ProfileController@update')->name('profile.update');
+    Route::PUT('/profile/updatepassword', 'ProfileController@updatepassword')->name('profile.updatepassword');
 
 	Route::resource('/home','HomeController');
 	Route::resource('/employee','EmployeeController');

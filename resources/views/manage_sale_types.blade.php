@@ -10,10 +10,11 @@
             <div class="card-body">
                 <h4 class="card-title">Manage Sale Types</h4>
                 <div style="display: inline">
-                <h6 class="card-subtitle float-left">Export data to Copy, CSV, Excel, PDF & Print</h6>
-                    <!-- sample modal content -->
+                <h6 class="card-subtitle float-left">Export data to Copy, Excel, PDF & Print</h6>
+                @if(Auth::user()->user_role == 'admin')
+                <!-- sample modal content -->
                     <div class="button-box">
-                        <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add New Employee</button>
+                        <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add New Sale Type</button>
                     </div>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
                         <div class="modal-dialog  modal-lg" role="document">
@@ -37,13 +38,14 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Add Empployee">
+                                    <input type="submit" class="btn btn-primary" value="Add Sale Type">
                                 </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <!-- /.modal -->
+                @endif
 
                 </div>
                 <div class="table-responsive m-t-40">
@@ -53,7 +55,9 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                @if(Auth::user()->user_role == 'admin')
                                 <th>Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tfoot>
@@ -61,7 +65,9 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                @if(Auth::user()->user_role == 'admin')
                                 <th>Actions</th>
+                                @endif
                             </tr>
                         </tfoot>
                         <tbody>
@@ -73,12 +79,13 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $saletype->name }}</td>
                                     <td>{{ $saletype->description }}</td>
+                                @if(Auth::user()->user_role == 'admin')
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}
-@if(!$saletype->trashed())
+                            @if(!$saletype->trashed())
                                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#updatesaletype{{$saletype->id}}" data-whatever="@mdo">Edit</button>
                                 <!-- sample modal content -->
-@endif
+                            @endif
                                 <div class="modal fade" id="updatesaletype{{$saletype->id}}" tabindex="-1" role="dialog" aria-labelledby="updatesaletype{{$saletype->id}}Label1">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
@@ -104,7 +111,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Update saletype">
+                                    <input type="submit" class="btn btn-primary" value="Update Sale Type">
                                 </div>
                                 </form>
                                         </div>
@@ -112,17 +119,7 @@
                                 </div>
                                 <!-- /.modal -->
 {{-- ********* EDIT ENDS HERE *********** --}}
-
-
-@if($saletype->trashed())
-{{$saletype->deleted_at}}
-    {{-- Recover the employee --}}
-    <a class="btn btn-info btn-sm" href="{{route('admin.saletype.recover',$saletype->id)}}">Restore</a>
-@else
-
-    {{--  this is for temprary delete  like trash in our localhost --}}
-    <a class="btn btn-warning btn-sm" href="{{route('admin.saletype.remove',$saletype->id)}}">Trash</a>
-    {{--  this is for permanant delete  --}}
+  {{--  this is for permanant delete  --}}
     <a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{$saletype->id}}')">Delete</a>
         <form id="delete-saletype-{{$saletype->id}}"
             action="{{ route('admin.saletype.destroy', $saletype->id) }}"

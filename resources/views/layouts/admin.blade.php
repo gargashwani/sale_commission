@@ -66,20 +66,9 @@
                     <a class="navbar-brand" href="#">
                         <!-- Logo icon -->
                         <b>
-                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            <!-- Dark Logo icon -->
-                            <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                            <!-- Light Logo icon -->
-                            <img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                            <i class="mdi mdi-apps" style="color:#fff; font-size:30px;"></i>
                         </b>
-                        <!--End Logo icon -->
-                        <!-- Logo text -->
-                        <span>
-                            <!-- dark Logo text -->
-                            <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                            <!-- Light Logo text -->
-                            <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
-                        </span>
+
                     </a>
                 </div>
                 <!-- ============================================================== -->
@@ -117,33 +106,12 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 <ul class="dropdown-user">
-                                    {{-- <li>
-                                        <div class="dw-user-box">
-                                            <div class="u-text">
-                                                <h4>Steave Jobs</h4>
-                                                <p class="text-muted">varun@gmail.com</p>
-                                                <a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
-                                            </div>
-                                        </div>
-                                    </li> --}}
-                                    {{-- <li role="separator" class="divider"></li> --}}
+
                                     <li>
-                                        <a href="#">
+                                        <a href="{{route('admin.profile')}}">
                                             <i class="ti-user"></i> My Profile</a>
                                     </li>
-                                    {{-- <li>
-                                        <a href="#">
-                                            <i class="ti-wallet"></i> My Balance</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-email"></i> Inbox</a>
-                                    </li> --}}
-                                    {{-- <li role="separator" class="divider"></li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-settings"></i> Account Setting</a>
-                                    </li> --}}
+
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
@@ -180,30 +148,30 @@
                         <li class="nav-small-cap">Navigation</li>
                         <li><a class="waves-effect waves-dark" href="{{route('admin.home.index')}}"><i class="mdi mdi-gauge"></i> Dashboard</a></li>
 
-                        {{-- <li><a href="{{route('admin.sale.index')}}"><i class="mdi mdi-gauge"></i>Sales</a></li> --}}
                         <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
                                     class="hide-menu">Sales </span></a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="{{route('admin.sale.create')}}">Create</a></li>
+                                @if(Auth::user()->user_role == 'admin')
+                                    <li><a href="{{route('admin.sale.create')}}">Create</a></li>
+                                @endif
                                 <li><a href="{{route('admin.sale.index')}}">Manage</a></li>
                             </ul>
                         </li>
-
-                        <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
+<li><a class="waves-effect waves-dark" href="{{route('admin.employee.index')}}"><i class="mdi mdi-gauge"></i>   Employees</a></li>
+                        {{-- <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
                                     class="hide-menu">Employees </span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{route('admin.employee.index')}}">Manage Employees</a></li>
-                                <li><a href="{{route('admin.employee.trash')}}">Trashed Employees</a></li>
                             </ul>
-                        </li>
-
-                        <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
+                        </li> --}}
+<li><a class="waves-effect waves-dark" href="{{route('admin.saletype.index')}}"><i class="mdi mdi-gauge"></i>   Sale Types</a></li>
+                        {{-- <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
                                     class="hide-menu">Sale Types </span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{route('admin.saletype.index')}}">Manage Sale Types</a></li>
                                 <li><a href="{{route('admin.saletype.trash')}}">Trashed Sale Types</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                     </ul>
 
@@ -214,15 +182,7 @@
             <!-- End Sidebar scroll-->
             <!-- Bottom points-->
             <div class="sidebar-footer">
-                <!-- item-->
-                {{-- <a href="" class="link" data-toggle="tooltip" title="Settings">
-                    <i class="ti-settings"></i>
-                </a> --}}
-                <!-- item-->
-                {{-- <a href="" class="link" data-toggle="tooltip" title="Email">
-                    <i class="mdi mdi-gmail"></i>
-                </a> --}}
-                <!-- item-->
+
                 <a class="link" data-toggle="tooltip" title="Logout" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="mdi mdi-power"></i>
@@ -264,7 +224,7 @@
                                     <h6 class="m-b-0">
                                         <small>THIS MONTH SALE</small>
                                     </h6>
-                                    <h4 class="m-t-0 text-info">${{Session('thisMonthAmount')}}</h4>
+                                    <h4 class="m-t-0 text-info">${{number_format(Session('thisMonthAmount'),2)}}</h4>
                                 </div>
                                 <div class="spark-chart">
                                     <div id="thismonthchart"></div>
@@ -275,7 +235,7 @@
                                     <h6 class="m-b-0">
                                         <small>LAST MONTH SALE</small>
                                     </h6>
-                                    <h4 class="m-t-0 text-primary">${{Session('lastMonthAmount')}}</h4>
+                                    <h4 class="m-t-0 text-primary">${{number_format(Session('lastMonthAmount'),2)}}</h4>
                                 </div>
                                 <div class="spark-chart">
                                     <div id="lastmonthchart"></div>
@@ -319,7 +279,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer">
-                © 2019 {{ config('app.name')}} Developed By <a href="https://www.devpremier.com/">DevPremier</a>
+                © 2019 {{ config('app.name')}} Developed By <a href="https://zuckerandzucker.com">Zuckerandzucker</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

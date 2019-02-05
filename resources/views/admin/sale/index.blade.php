@@ -4,66 +4,68 @@
 
 {{--  Sort Data Starts --}}
 <div class="card card-body">
-{{-- ********* Add New Sale STARTS HERE********** --}}
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addsale" data-whatever="@mdo">Create Sale</button>
-                                <div class="modal fade" id="addsale" tabindex="-1" role="dialog" aria-labelledby="addsaleLabel1">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="addsaleLabel1">Create sale</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            </div>
-                            <form method="POST" action="{{route('admin.sale.store')}}">
-                            @csrf
-                                <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="form-group">
-                                            <label for="">* Select Employee</label><br>
-                                            <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                @foreach ($employees as $employee)
-                                                    <option value="{{$employee->id}}">{{$employee->name}}</option>
+@if(Auth::user()->user_role == 'admin')
+    {{-- ********* Add New Sale STARTS HERE********** --}}
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addsale" data-whatever="@mdo">Create Sale</button>
+                                    <div class="modal fade" id="addsale" tabindex="-1" role="dialog" aria-labelledby="addsaleLabel1">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="addsaleLabel1">Create sale</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <form method="POST" action="{{route('admin.sale.store')}}">
+                                @csrf
+                                    <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="">* Select Employee</label><br>
+                                                <select name="employee_id" id="" class="form-control" required="TRUE">
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">* Sale Type</label><br>
+                                            <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                                                @foreach ($saletypes as $saletype)
+                                                    <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="">* Sale Type</label><br>
-                                        <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
-                                            @foreach ($saletypes as $saletype)
-                                                <option value="{{$saletype->id}}">{{$saletype->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="">* Date of Sale</label><br>
-                                        <input type="date" name="dateofsale" class="form-control"   id="mdate" data-dtp="dtp_GJMLm" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="">* Job Number</label><br>
-                                        <input type="number" name="jobnumber" class="form-control" required >
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="">* Amount</label><br>
-                                    <input type="number" name="amount" class="form-control" required >
-                                    </div>
-                                </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Add New Sale">
-                                </div>
-                                </form>
+                                        <div class="col-4">
+                                            <label for="">* Date of Sale</label><br>
+                                            <input type="date" name="dateofsale" class="form-control"   id="mdate" data-dtp="dtp_GJMLm" required>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- /.modal -->
-{{-- ********* ADD new sale ENDS HERE *********** --}}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="">* Job Number</label><br>
+                                            <input type="number" name="jobnumber" class="form-control" required >
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="">* Amount</label><br>
+                                        <input type="number" name="amount" class="form-control" step="any" required >
+                                        </div>
+                                    </div>
 
-    <br>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" class="btn btn-primary" value="Add New Sale">
+                                    </div>
+                                    </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal -->
+                                    <br>
+    {{-- ********* ADD new sale ENDS HERE *********** --}}
+@endif
+
     <form action="{{route('admin.sale.getrange')}}" method="POST">
         @csrf
         <div class="row">
@@ -181,14 +183,75 @@
 
 
             <div class="col-2 form-group">
-                <input type="submit" class="btn btn-warning btn-sm" value="Get Feed">
+                <input type="submit" class="btn btn-warning btn-sm" value="Run Report">
             </div>
 
         </div>
     </form>
 </div>
 {{-- Sort Data ends --}}
+<div class="row">
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">${{number_format($totalSaleAmount,2)}}</h3>
+                        <h5 class="text-muted m-b-0">Sale Amount</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
 
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-light">${{number_format($totalSaleAmount - $totalCommission,2)}}</h3>
+                        <h5 class="text-muted m-b-0">Revenue</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">${{number_format($totalCommission,2)}}</h3>
+                        <h5 class="text-muted m-b-0">Commission</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+    <!-- Column -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row">
+                    <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-cart-outline"></i></div>
+                    <div class="m-l-10 align-self-center">
+                        <h3 class="m-b-0 font-lgiht">{{number_format($totalSales)}}</h3>
+                        <h5 class="text-muted m-b-0"># Sales</h5></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+
+</div>
 {{-- table starts here --}}
 <div class="row">
     <div class="col-12">
@@ -196,7 +259,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Manage sales</h4>
-                <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6>
+                <h6 class="card-subtitle">Export data to Copy, Excel, PDF & Print</h6>
 
                 <div class="table-responsive m-t-40">
                     <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
@@ -235,9 +298,9 @@
                                     <td>{{ @$sale->saletype->name }}</td>
                                     {{-- Y-m-d Format --}}
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
-                                    <td>{{ number_format($sale->amount) }}</td>
-                                    <td>{{ number_format($sale->commission) }}</td>
-                                    <td>{{ number_format($sale->amount - $sale->commission) }}</td>
+                                    <td>{{ number_format($sale->amount,2) }}</td>
+                                    <td>{{ number_format($sale->commission,2) }}</td>
+                                    <td>{{ number_format($sale->amount - $sale->commission,2) }}</td>
 
                                     <td>
 {{-- ********* EDIT STARTS HERE********** --}}
@@ -287,7 +350,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="">* Amount</label><br>
-                                    <input type="number" name="amount" class="form-control" required value="{{$sale->amount}}">
+                                    <input type="number" name="amount" class="form-control" step="any"  required value="{{$sale->amount}}">
                                     </div>
                                 </div>
 

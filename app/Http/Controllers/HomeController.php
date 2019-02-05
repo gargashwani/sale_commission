@@ -239,15 +239,8 @@ class HomeController extends Controller
             'alltimeSaleAmount','alltimeCommission','alltimeSales'));
     }
 
-    public function getrange(Request $request){
-        // dump($request->employee_id);
-        // dump($request->saletype_id);
-        // dump($request->range);
-        // dump($request->rangeselector);
-        // dump($date1);
-        // dump($date2);
 
-        // $sales = Sale::whereBetween('dateofsale', [$date1, $date2])->get();;
+    public function getrange(Request $request){
 
         $query = Sale::query();
 
@@ -266,9 +259,7 @@ class HomeController extends Controller
             $date2 = date('Y-m-d', strtotime($date[2]));
             return $q->whereBetween('dateofsale', [ $date1, $date2]);
         });
-        // $query->when(request('filter_by') == 'date', function ($q) {
-        //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
-        // });
+
         $sales = $query->get();
         // dd($sales);
 
@@ -295,22 +286,23 @@ class HomeController extends Controller
         ]);
 
         if ($commission) {
-            return back()->with('message','Commission added successfully!');
+            return redirect(route('admin.home.index'))->with('message','Commission added successfully!');
         }else{
             return back()->withErrors($validators);
         }
     }
 
-    public function update(Request $request, Commission $commission){
-        // dd($commission);
+    public function update(Request $request){
         $validators = $request->validate([
             'commission'=> 'required'
         ]);
+        // dump($request);
         $commission = Commission::first();
+        // dd($commission);
         $commission->commission = $request->commission;
 
         if ($commission->save()) {
-            return back()->with('message','Commission updated successfully!');
+            return redirect(route('admin.home.index'))->with('message','Commission updated successfully!');
         }else{
             return back()->withErrors($validators);
         }

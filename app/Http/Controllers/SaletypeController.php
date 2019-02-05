@@ -103,6 +103,7 @@ class SaletypeController extends Controller
             'name'=>'required|min:2',
         ]);
         $saletype->name = $request->name;
+        $saletype->description = $request->description;
 
         //save current record into database
         $saved = $saletype->save();

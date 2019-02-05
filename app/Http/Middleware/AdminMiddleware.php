@@ -18,7 +18,7 @@ class AdminMiddleware
     {
         if(Auth::user()->user_role == 'manager')
         {   // redirect with flash session message
-            dd(Auth::user());
+            // dd(Auth::user());
             // return redirect('/home')->with('message','You are Not Allowed To Access!');
         }
         return $next($request);

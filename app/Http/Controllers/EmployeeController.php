@@ -59,28 +59,30 @@ class EmployeeController extends Controller
     {
         $validators = $request->validate([
             'name'=>'required|min:2',
-            'email'=>'required|min:5|unique:employees|email'
+            'email'=>'required|min:5|unique:employees|email',
+            'bgcolor'=>'required',
+            'bordercolor'=>'required'
         ]);
 
-        // dd($validators);
+        // dd($request);
 
        if($request){
         $employee = Employee::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'postcode' => $request->postcode,
+            'zip' => $request->zip,
             'city' => $request->city,
             'state' => $request->state,
             'bgcolor' => $request->bgcolor,
             'bordercolor' => $request->bordercolor,
-            'country' => $request->country,
+            'address' => $request->address,
             'status' => '1'
         ]);
        }
     //    dd($employee);
        if($employee)
-            return redirect(route('admin.home'))->with('message','Employee added successfully!');
+            return back()->with('message','Employee added successfully!');
         else
             return back()->withErrors($validators);
     }
@@ -121,10 +123,10 @@ class EmployeeController extends Controller
         ]);
         $employee->name = $request->name;
         $employee->phone = $request->phone;
-        $employee->postcode = $request->postcode;
+        $employee->zip = $request->zip;
         $employee->city = $request->city;
         $employee->state = $request->state;
-        $employee->country = $request->country;
+        $employee->address = $request->address;
         $employee->bgcolor = $request->bgcolor;
         $employee->bordercolor = $request->bordercolor;
         if ($request->status == 'on') {

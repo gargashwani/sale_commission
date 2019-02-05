@@ -20,10 +20,10 @@ class CreateEmployeesTable extends Migration
             $table->boolean('status');
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->string('country')->nullable();
+            $table->string('address')->nullable();
             $table->string('bgcolor')->nullable();
             $table->string('bordercolor')->nullable();
-            $table->char('postcode', 20)->nullable();
+            $table->char('zip', 20)->nullable();
             $table->char('phone', 20)->nullable();
             $table->softDeletes();
             $table->timestamps();

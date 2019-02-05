@@ -12,7 +12,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{ number_format($alltimeSaleAmount)}}</h3>
+                        <h3 class="m-b-0 font-lgiht">${{ number_format($alltimeSaleAmount,2)}}</h3>
                         <h5 class="text-muted m-b-0">Total Sale Amount</h5></div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-light">$ {{number_format($alltimeSaleAmount - $alltimeCommission)}}</h3>
+                        <h3 class="m-b-0 font-light">${{number_format($alltimeSaleAmount - $alltimeCommission,2)}}</h3>
                         <h5 class="text-muted m-b-0">Total Revenue</h5></div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{number_format($alltimeCommission)}}</h3>
+                        <h3 class="m-b-0 font-lgiht">${{number_format($alltimeCommission,2)}}</h3>
                         <h5 class="text-muted m-b-0">Total Commission</h5></div>
                 </div>
             </div>
@@ -180,7 +180,7 @@
             </div>
             <div class="col-1">
                 <label for="">Sort</label><br>
-                <input type="submit" class="btn btn-info btn-sm" value="Get Feed">
+                <input type="submit" class="btn btn-info btn-sm" value="Run Report">
             </div>
         </div>
     </form>
@@ -191,9 +191,9 @@
 <br>
 
 @if(@$rangeDataSelector == 'on')
-For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$toDate))}}
+For: {{ date('m-d-Y', strtotime(@$fromDate))}} To {{ date('m-d-Y', strtotime(@$toDate))}}
 @endif
-<span><b>Default data</b > - For current year, for all employees and for all sale types, You can off it for sorting!</span>
+<span><b>Default data</b > - For current year, for all employees and for all sale types!</span>
 <div class="row">
     <!-- Column -->
     <div class="col-lg-3 col-md-6">
@@ -202,7 +202,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{number_format($totalSaleAmount)}}</h3>
+                        <h3 class="m-b-0 font-lgiht">${{number_format($totalSaleAmount,2)}}</h3>
                         <h5 class="text-muted m-b-0">Sale Amount</h5></div>
                 </div>
             </div>
@@ -217,7 +217,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-light">$ {{number_format($totalSaleAmount - $totalCommission)}}</h3>
+                        <h3 class="m-b-0 font-light">${{number_format($totalSaleAmount - $totalCommission,2)}}</h3>
                         <h5 class="text-muted m-b-0">Revenue</h5></div>
                 </div>
             </div>
@@ -232,7 +232,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="d-flex flex-row">
                     <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
                     <div class="m-l-10 align-self-center">
-                        <h3 class="m-b-0 font-lgiht">$ {{number_format($totalCommission)}}</h3>
+                        <h3 class="m-b-0 font-lgiht">${{number_format($totalCommission,2)}}</h3>
                         <h5 class="text-muted m-b-0">Commission</h5></div>
                 </div>
             </div>
@@ -276,6 +276,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 <div class="row">
                     <form action="{{route('admin.home.getdatabyyear')}}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="col-md-3">
                             <select name="selectYear" id="selectYear" onchange="this.form.submit()">
                                 {{-- <option selected disabled>Select an year</option> --}}
@@ -304,7 +305,7 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
 </div>
 
 <div class="row">
-    <div class="col-4">
+    <div class="col-6">
         <div class="card card-body">
             <form action="@if($commission){{{route('admin.home.update', $commission)}}}@else{{{route('admin.home.store')}}}@endif" method="POST">
                 @csrf
@@ -313,10 +314,10 @@ For: {{ date('d-m-Y', strtotime(@$fromDate))}} To {{ date('d-m-Y', strtotime(@$t
                 @endif
                 <div class="form-group">
                         <label for="">Commission</label>
-                        <input type="number" name="commission" class='form-control'
+                        <input type="number" name="commission" class='form-control' step="any"
                         value="{{@$commission->commission}}">
                     </div>
-                    <input type="submit" value="Submit" class="btn btn-warning btn-sm">
+                    <input type="submit" value="Submit" class="btn btn-warning">
             </form>
         </div>
     </div>

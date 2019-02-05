@@ -21,6 +21,10 @@ class SaleController extends Controller
     {
         $pageTitle = 'Sales';
         $sales = Sale::all();
+        $totalCommission = Sale::sum('commission');
+        $totalSaleAmount = Sale::sum('amount');
+        $totalSales = Sale::count();
+
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
@@ -28,7 +32,8 @@ class SaleController extends Controller
            ->orderBy('id', 'desc')
            ->get();
         // dd($saletypes);
-        return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'));
+        return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'
+                                    ,'totalCommission','totalSaleAmount','totalSales'));
     }
 
     public function getrange(Request $request){
@@ -114,6 +119,10 @@ class SaleController extends Controller
         // $query->when(request('filter_by') == 'date', function ($q) {
         //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
         // });
+        $totalCommission = $query->sum('commission');
+        $totalSaleAmount = $query->sum('amount');
+        $totalSales = $query->count();
+
         $sales = $query->get();
         // dd($sales);
 
@@ -128,7 +137,8 @@ class SaleController extends Controller
         return view('admin.sale.index', compact('sales','pageTitle'
                     ,'employees','saletypes','showweekdata','weektype'
                     ,'saletype_id', 'employee_id','rangeselector','range'
-                    ,'selectedQuarter','selectedDataYear','selectedDataQuarter'));
+                    ,'selectedQuarter','selectedDataYear','selectedDataQuarter'
+                    ,'totalSaleAmount','totalCommission','totalSales'));
 
     }
 
@@ -160,7 +170,7 @@ class SaleController extends Controller
     {
         // dd($request);
         $validators = $request->validate([
-            'amount'=>'integer|required',
+            'amount'=>'required',
             'jobnumber'=>'integer|required|unique:sales',
             'dateofsale'=>'required'
         ]);
@@ -223,7 +233,7 @@ class SaleController extends Controller
     {
         // dump($request);
         $validators = $request->validate([
-            'amount'=>'integer|required',
+            'amount'=>'required',
             'jobnumber' => 'required|unique:sales,jobnumber,'.$sale->jobnumber.',jobnumber',
             'dateofsale'=>'required'
         ]);

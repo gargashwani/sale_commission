@@ -23,7 +23,7 @@ class Employee extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'status', 'city', 'state', 'country', 'postcode', 'phone'
+        'name', 'email', 'status', 'city', 'state', 'address', 'zip', 'phone', 'bgcolor', 'bordercolor'
     ];
 
     public function user()

@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-2">
                                 <label for="">* Date of Sale</label>
-                                <input type="text" name="dateofsale" class="form-control " placeholder="2019-01-16" id="mdate" data-dtp="dtp_GJMLm" required>
+                            <input type="text" name="dateofsale" class="form-control " placeholder="{{date('Y-m-d')}}" id="mdate" data-dtp="dtp_GJMLm" required>
                             </div>
 
                             <div class="col-2">
@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-2">
                                 <label for="">* Amount</label>
-                                <input type="number" name="amount" class="form-control" required>
+                                <input type="number" name="amount" class="form-control" step="any" required>
                             </div>
                             <div class="col-1">
                                 <label for=""></label>
