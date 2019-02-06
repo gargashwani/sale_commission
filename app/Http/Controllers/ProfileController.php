@@ -25,9 +25,22 @@ class ProfileController extends Controller
         return view('admin.profile.index', compact('pageTitle','user'));
     }
 
+    public function getmanager(){
+        $user = User::where('user_role','manager')->first();
+        // dd($user);
+        $pageTitle = 'Manager Profile';
+        return view('admin.profile.manager', compact('pageTitle','user'));
+    }
+
     public function update(Request $request){
         // dd($request);
-        $user = Auth::user();
+
+        if(@$request->user_role == 'manager'){
+            $user = User::where('user_role','manager')->first();
+        }else{
+            $user = Auth::user();
+        }
+        // dd($user);
         $validators = $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users,email,'.$user->email.',email',
@@ -45,7 +58,11 @@ class ProfileController extends Controller
     }
 
     public function updatepassword(Request $request){
-        $user = Auth::user();
+        if(@$request->user_role == 'manager'){
+            $user = User::where('user_role','manager')->first();
+        }else{
+            $user = Auth::user();
+        }
 
         $validators = $request->validate([
             'old_password'=>'required',

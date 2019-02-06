@@ -23,6 +23,17 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $pageTitle = 'Dashboard';
+
+        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
+                                    ->groupBy(function($val) {
+                                        return Carbon::parse($val->dateofsale)->format('Y');
+                                    });
+        $years = [];
+        foreach ($salesds as $key => $year) {
+            array_unshift($years, $key);
+        }
+
+        // dd($years);
         $sales = Sale::all();
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
            ->orderBy('id', 'asc')
@@ -34,9 +45,9 @@ class HomeController extends Controller
         $commission = Commission::first();
         // dd($commission);
         $totalEmployees = Employee::where(['status'=> 1,'deleted_at'=>NULL])->count();
-        $alltimeSaleAmount = Sale::sum('amount');
-        $alltimeCommission = Sale::sum('commission');
-        $alltimeSales = Sale::count();
+        $alltimeSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
+        $alltimeCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
+        $alltimeSales = Sale::whereYear('dateofsale',date('Y'))->count();
 
         Carbon::setWeekStartsAt(Carbon::SUNDAY);
         Carbon::setWeekEndsAt(Carbon::SATURDAY);
@@ -50,6 +61,8 @@ class HomeController extends Controller
         // dump($request->employee_id);
         if($request->employee_id != null){
             $selectedEmployee = $request->employee_id;
+            $selectedempname = Employee::where('id',$request->employee_id)->first();
+            // dump($selectedempname->name);
             $query->when(request('employee_id') != 'all', function ($q) {
                 return $q->where('employee_id', request('employee_id'));
             });
@@ -58,6 +71,8 @@ class HomeController extends Controller
         // dump($request->saletype_id);
         if($request->saletype_id != null){
             $selectedSaletype = $request->saletype_id;
+            $saleTypeName = Saletype::where('id',$request->saletype_id)->first();
+
             $query->when(request('saletype_id') != 'all', function ($q) {
                 return $q->where('saletype_id', request('saletype_id'));
             });
@@ -143,6 +158,36 @@ class HomeController extends Controller
         // $query->when(request('filter_by') == 'date', function ($q) {
         //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
         // });
+
+        // dump(date('m'));
+
+        // For default selection of current quarter
+        if($request->quarterselector != 'on' && $request->alltimeselector != 'on'
+            && $request->selectDataQurater == null
+        ){
+            $defaultdata = 'set';
+            if(date('m') >= '01' && date('m') <= '03'){
+                $query->when(request('selectDataQurater') == 'q1', function ($q) {
+                    return $q->whereIn(DB::raw('MONTH(dateofsale)'), [1,2,3]);
+                });
+            }
+            if(date('m') >= '04' && date('m') <= '06'){
+                $query->when(request('selectDataQurater') == 'q1', function ($q) {
+                    return $q->whereIn(DB::raw('MONTH(dateofsale)'), [4,5,6]);
+                });
+            }
+            if(date('m') >= '07' && date('m') <= '09'){
+                $query->when(request('selectDataQurater') == 'q1', function ($q) {
+                    return $q->whereIn(DB::raw('MONTH(dateofsale)'), [7,8,9]);
+                });
+            }
+            if(date('m') >= '10' && date('m') <= '12'){
+                $query->when(request('selectDataQurater') == 'q1', function ($q) {
+                    return $q->whereIn(DB::raw('MONTH(dateofsale)'), [10,11,12]);
+                });
+            }
+        }
+
         $totalCommission = $query->sum('commission');
         $totalSaleAmount = $query->sum('amount');
         $totalSales = $query->count();
@@ -181,6 +226,7 @@ class HomeController extends Controller
         }
         // dump($selectedYear);
         $total_Employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])->count();
+
         for($j=0; $j<$total_Employees; $j++){
             // dump($employees[$j]->id);
             for ($i=0; $i<=11; $i++){
@@ -236,7 +282,8 @@ class HomeController extends Controller
                 ,'salePerMonth','chartjs','selectedYear','selectedDataYear',
             'selectedEmployee','selectedQuarter','selectedSaletype','rangeDataSelector'
             ,'fromDate','toDate','dateRange','alltimeselector','allTime',
-            'alltimeSaleAmount','alltimeCommission','alltimeSales'));
+            'alltimeSaleAmount','alltimeCommission','alltimeSales','years'
+            ,'selectedempname','saleTypeName','defaultdata'));
     }
 
 

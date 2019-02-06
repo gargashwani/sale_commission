@@ -3,7 +3,13 @@
 $(document).ready(function(){
 
     $('#saleTypeTable').DataTable( {
-        "columnDefs" : [{"targets":3, "type":"date-eu"}],
+        "columnDefs" : [
+            // {"targets":3, "type":"date-eu"},
+            { "width": "10px", "targets": 0 },
+            { "width": "40px", "targets": 1 },
+            { "width": "100px", "targets": 2 },
+            { "width": "70px", "targets": 3 },
+        ],
         "order": [[ 0, "desc" ]],
         dom: '<"top"Bf>rt<"bottom"lip><"clear">',
         // dom: 'Bfrtip',

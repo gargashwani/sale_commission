@@ -13,7 +13,7 @@
                     <div class="round round-lg align-self-center round-warning"><i class="mdi mdi-cellphone-link"></i></div>
                     <div class="m-l-10 align-self-center">
                         <h3 class="m-b-0 font-lgiht">${{ number_format($alltimeSaleAmount,2)}}</h3>
-                        <h5 class="text-muted m-b-0">Total Sale Amount</h5></div>
+                        <h5 class="text-muted m-b-0">YTD Sale Amount</h5></div>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                     <div class="round round-lg align-self-center round-info"><i class="ti-wallet"></i></div>
                     <div class="m-l-10 align-self-center">
                         <h3 class="m-b-0 font-light">${{number_format($alltimeSaleAmount - $alltimeCommission,2)}}</h3>
-                        <h5 class="text-muted m-b-0">Total Revenue</h5></div>
+                        <h5 class="text-muted m-b-0">YTD Revenue</h5></div>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <div class="round round-lg align-self-center round-danger"><i class="mdi mdi-bullseye"></i></div>
                     <div class="m-l-10 align-self-center">
                         <h3 class="m-b-0 font-lgiht">${{number_format($alltimeCommission,2)}}</h3>
-                        <h5 class="text-muted m-b-0">Total Commission</h5></div>
+                        <h5 class="text-muted m-b-0">YTD Commission</h5></div>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                     <div class="round round-lg align-self-center round-primary"><i class="mdi mdi-cart-outline"></i></div>
                     <div class="m-l-10 align-self-center">
                         <h3 class="m-b-0 font-lgiht">{{number_format($alltimeSales)}}</h3>
-                        <h5 class="text-muted m-b-0"># Total Sales</h5></div>
+                        <h5 class="text-muted m-b-0"># YTD Sales</h5></div>
                 </div>
             </div>
         </div>
@@ -129,14 +129,17 @@
                     </div>
 
                     <select name="selectDataYear" id="selectYear" >
-                        @for($i = 2010;$i<2099;$i++)
+                        @foreach ($years as $year)
+                            <option value="{{$year}}">{{$year}}</option>
+                        @endforeach
+                        {{-- @for($i = 2010;$i<2099;$i++)
                             @if($i == @ $selectedDataYear)
                                 <option selected value="{{@ $selectedDataYear}}">
                                     {{@ $selectedDataYear}}
                                 </option>
                             @endif
                             <option value="{{$i}}" >{{$i}}</option>
-                        @endfor
+                        @endfor --}}
                     </select>
                     <select name="selectDataQurater" id="showQuraters"
                     @if(@$selectedQuarter == null)
@@ -158,9 +161,9 @@
                     <select name="employee_id" id="" class="" required="TRUE">
                         <option value="all" selected>All selected</option>
                         @foreach ($employees as $employee)
-                            @if(@$selectedEmployee == $employee->id)
+                            {{-- @if(@$selectedEmployee == $employee->id)
                                 <option value="{{@$selectedEmployee}}" selected>{{@$employee->name}}</option>
-                            @endif
+                            @endif --}}
                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                         @endforeach
                     </select>
@@ -171,9 +174,9 @@
                 <select name="saletype_id" id="saletype_id" class="" required="TRUE">
                     <option value="all" selected>All selected</option>
                     @foreach ($saletypes as $saletype)
-                        @if(@$selectedSaletype == $saletype->id)
+                        {{-- @if(@$selectedSaletype == $saletype->id)
                             <option value="{{@$selectedSaletype}}" selected>{{@$saletype->name}}</option>
-                        @endif
+                        @endif --}}
                         <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                     @endforeach
                 </select>
@@ -190,10 +193,27 @@
 <!-- ==================== TOTAL DATA STARTS ============================ -->
 <br>
 
-@if(@$rangeDataSelector == 'on')
-For: {{ date('m-d-Y', strtotime(@$fromDate))}} To {{ date('m-d-Y', strtotime(@$toDate))}}
+
+
+<span>
+@if(@$defaultdata == 'set')
+Report for current quarter
 @endif
-<span><b>Default data</b > - For current year, for all employees and for all sale types!</span>
+{{-- <b>Report for</b>  @if(@$selectedYear != null){{ @$selectedDataYear}}@endif --}}
+@if(@$rangeDataSelector == 'on')
+{{ date('m-d-Y', strtotime(@$fromDate))}} To {{ date('m-d-Y', strtotime(@$toDate))}}
+@endif
+
+@if(@$selectedQuarter == 'q1') {!! ', Quarter 1 ,'; !!} @endif
+@if(@$selectedQuarter == 'q2') {!! ', Quarter 2 ,'; !!} @endif
+@if(@$selectedQuarter == 'q3') {!! ', Quarter 3 ,'; !!} @endif
+@if(@$selectedQuarter == 'q4') {!! ', Quarter 4 ,'; !!} @endif
+<b>
+    @if(@$selectedempname != null) {{@$selectedempname->name.', '}} @else {!! ', all employees, ' !!} @endif
+</b>
+Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all sale types' !!} @endif
+</span>
+
 <div class="row">
     <!-- Column -->
     <div class="col-lg-3 col-md-6">
@@ -274,20 +294,25 @@ For: {{ date('m-d-Y', strtotime(@$fromDate))}} To {{ date('m-d-Y', strtotime(@$t
             <div class="card-title float-left">Employee - Sale Monthly Graph - {{@ $selectedYear}}</div>
             <div class="float-right">
                 <div class="row">
+                    Select a year to update report
                     <form action="{{route('admin.home.getdatabyyear')}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="col-md-3">
                             <select name="selectYear" id="selectYear" onchange="this.form.submit()">
                                 {{-- <option selected disabled>Select an year</option> --}}
-                                @for($i = 2010;$i<2099;$i++)
+
+                        @foreach ($years as $year)
+                            <option value="{{$year}}">{{$year}}</option>
+                        @endforeach
+                                {{-- @for($i = 2010;$i<2099;$i++)
                                     @if($i == @ $selectedYear)
                                         <option selected value="{{@ $selectedYear}}">
                                             {{@ $selectedYear}}
                                         </option>
                                     @endif
                                    <option value="{{$i}}" >{{$i}}</option>
-                                @endfor
+                                @endfor --}}
                             </select>
                         </div>
 

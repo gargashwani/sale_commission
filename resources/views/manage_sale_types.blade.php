@@ -46,7 +46,7 @@
                     @endif
                 </div>
                 <div class="table-responsive m-t-40">
-                    <table id="saleTypeTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                    <table id="saleTypeTable" class="display  table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>

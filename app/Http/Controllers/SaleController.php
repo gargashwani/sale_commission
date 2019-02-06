@@ -9,6 +9,7 @@ use App\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SaleController extends Controller
 {
@@ -21,10 +22,13 @@ class SaleController extends Controller
     {
         $pageTitle = 'Sales';
         $sales = Sale::all();
-        $totalCommission = Sale::sum('commission');
-        $totalSaleAmount = Sale::sum('amount');
-        $totalSales = Sale::count();
-
+        $totalCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
+        $totalSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
+        $totalSales = Sale::whereYear('dateofsale',date('Y'))->count();
+        // foreach ($totalSaleAmount as $key => $sale) {
+        //     dump($sale->amount);
+        // }
+        // dd($totalSaleAmount->amount);
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
@@ -32,19 +36,39 @@ class SaleController extends Controller
            ->orderBy('id', 'desc')
            ->get();
         // dd($saletypes);
+
+       // to get dynamic years from sales record to show years
+        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
+                                    ->groupBy(function($val) {
+                                        return Carbon::parse($val->dateofsale)->format('Y');
+                                    });
+        $years = [];
+        foreach ($salesds as $key => $year) {
+            array_unshift($years, $key);
+        }
+
         return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'
-                                    ,'totalCommission','totalSaleAmount','totalSales'));
+                                    ,'totalCommission','totalSaleAmount','totalSales','years'));
     }
 
     public function getrange(Request $request){
         // dump($request->range);
         // dump($request->rangeselector);
-
+       // to get dynamic years from sales record to show years
+        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
+                                    ->groupBy(function($val) {
+                                        return Carbon::parse($val->dateofsale)->format('Y');
+                                    });
+        $years = [];
+        foreach ($salesds as $key => $year) {
+            array_unshift($years, $key);
+        }
 
         $query = Sale::query();
 
         if($request->employee_id != null){
             $employee_id = $request->employee_id;
+            $employeeName = Employee::where('id',$request->employee_id)->first();
         }
         $query->when(request('employee_id') != 'all', function ($q) {
             return $q->where('employee_id', request('employee_id'));
@@ -52,6 +76,7 @@ class SaleController extends Controller
 
         if($request->saletype_id != null){
             $saletype_id = $request->saletype_id;
+            $saleTypeName = Saletype::where('id',$request->saletype_id)->first();
         }
         $query->when(request('saletype_id') != 'all', function ($q) {
             return $q->where('saletype_id', request('saletype_id'));
@@ -87,15 +112,15 @@ class SaleController extends Controller
             });
         }
 
-        if($request->showweekdata == 'on'){
+        if($request->showweekdata == 'on'  && $request->quarterselector != 'on'){
             $showweekdata = 'on';
             $weektype = $request->weekdata;
             $query->when(request('weekdata') == 'thisweek', function ($q) {
-                return $q->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear);
+                return $q->whereYear('dateofsale',date('Y'))->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear);
                 // return $q->whereBetween('dateofsale', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('amount');
             });
             $query->when(request('weekdata') == 'lastweek', function ($q) {
-                return $q->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear-1);
+                return $q->whereYear('dateofsale',date('Y'))->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear-1);
                 // return $q->whereBetween('dateofsale', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('amount');
             });
 
@@ -104,11 +129,21 @@ class SaleController extends Controller
         if($request->rangeselector  != 'on'){
             $rangeselector = $request->rangeselector;
             $range = $request->range;
+            $rangeDataSelector = $request->rangeselector;
         }
         // dump($range);
-        // dd($rangeselector);
-        if($request->showweekdata != null){
-            // dump('range');
+        // dump($rangeselector);
+        // dump($request->showweekdata );
+            // dump($request->range);
+            // dump($request->weekdata);
+            // dump($request->showweekdata);
+        // if($request->showweekdata != null && $request->range != null){
+        if( $request->range != null && $request->showweekdata == null && $request->quarterselector != 'on'){
+            // dump($request->range);
+            $date = explode(" ", $request->range);
+            $fromDate = date('Y-m-d', strtotime($date[0]));
+            $toDate = date('Y-m-d', strtotime($date[2]));
+
             $query->when(request('rangeselector') != 'on', function ($q) {
                 $date = explode(" ", request('range'));
                 $date1 = date('Y-m-d', strtotime($date[0]));
@@ -138,7 +173,9 @@ class SaleController extends Controller
                     ,'employees','saletypes','showweekdata','weektype'
                     ,'saletype_id', 'employee_id','rangeselector','range'
                     ,'selectedQuarter','selectedDataYear','selectedDataQuarter'
-                    ,'totalSaleAmount','totalCommission','totalSales'));
+                    ,'totalSaleAmount','totalCommission','totalSales','years'
+                    ,'employeeName','saleTypeName','fromDate','toDate',
+                'range'));
 
     }
 
@@ -156,6 +193,19 @@ class SaleController extends Controller
         $saletypes = Saletype::where(['deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
+
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+        $thisMonthAmount = Sale::whereMonth('dateofsale', $currentMonth)
+                                ->whereYear('dateofsale', $currentYear)
+                                ->sum('amount');
+        $lastMonthAmount = Sale::whereMonth('dateofsale', ($currentMonth-1))
+                                ->whereYear('dateofsale', $currentYear)
+                                ->sum('amount');
+
+        // dd($lastMonthAmount);
+        Session::put('thisMonthAmount',$thisMonthAmount);
+        Session::put('lastMonthAmount',$lastMonthAmount);
 
         return view('admin.sale.create',compact('pageTitle','employees','saletypes'));
     }

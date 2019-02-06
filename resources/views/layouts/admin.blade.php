@@ -111,7 +111,13 @@
                                         <a href="{{route('admin.profile')}}">
                                             <i class="ti-user"></i> My Profile</a>
                                     </li>
-
+                                    <li role="separator" class="divider"></li>
+                                @if(Auth::user()->user_role == 'admin')
+                                    <li>
+                                        <a href="{{route('admin.managerprofile')}}">
+                                            <i class="ti-user"></i> Update Manager</a>
+                                    </li>
+                                @endif
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
@@ -154,7 +160,7 @@
                                 @if(Auth::user()->user_role == 'admin')
                                     <li><a href="{{route('admin.sale.create')}}">Create</a></li>
                                 @endif
-                                <li><a href="{{route('admin.sale.index')}}">Manage</a></li>
+                                <li><a href="{{route('admin.sale.index')}}">Reports</a></li>
                             </ul>
                         </li>
 <li><a class="waves-effect waves-dark" href="{{route('admin.employee.index')}}"><i class="mdi mdi-gauge"></i>   Employees</a></li>

@@ -4,65 +4,65 @@
 
 {{--  Sort Data Starts --}}
 <div class="card card-body">
-@if(Auth::user()->user_role == 'admin')
+@if(Auth::user()->user_role == 'admin1')
     {{-- ********* Add New Sale STARTS HERE********** --}}
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addsale" data-whatever="@mdo">Create Sale</button>
-                                    <div class="modal fade" id="addsale" tabindex="-1" role="dialog" aria-labelledby="addsaleLabel1">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title" id="addsaleLabel1">Create sale</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                </div>
-                                <form method="POST" action="{{route('admin.sale.store')}}">
-                                @csrf
-                                    <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="">* Select Employee</label><br>
-                                                <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{$employee->id}}">{{$employee->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="">* Sale Type</label><br>
-                                            <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
-                                                @foreach ($saletypes as $saletype)
-                                                    <option value="{{$saletype->id}}">{{$saletype->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="">* Date of Sale</label><br>
-                                            <input type="date" name="dateofsale" class="form-control"   id="mdate" data-dtp="dtp_GJMLm" required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="">* Job Number</label><br>
-                                            <input type="number" name="jobnumber" class="form-control" required >
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="">* Amount</label><br>
-                                        <input type="number" name="amount" class="form-control" step="any" required >
-                                        </div>
-                                    </div>
+        <div class="modal fade" id="addsale" tabindex="-1" role="dialog" aria-labelledby="addsaleLabel1">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" id="addsaleLabel1">Create sale</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <form method="POST" action="{{route('admin.sale.store')}}">
+    @csrf
+        <div class="modal-body">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">* Select Employee</label><br>
+                    <select name="employee_id" id="" class="form-control" required="TRUE">
+                        @foreach ($employees as $employee)
+                            <option value="{{$employee->id}}">{{$employee->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="">* Sale Type</label><br>
+                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                    @foreach ($saletypes as $saletype)
+                        <option value="{{$saletype->id}}">{{$saletype->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="">* Date of Sale</label><br>
+                <input type="date" name="dateofsale" class="form-control"   id="mdate" data-dtp="dtp_GJMLm" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <label for="">* Job Number</label><br>
+                <input type="number" name="jobnumber" class="form-control" required >
+            </div>
+            <div class="col-6">
+                <label for="">* Amount</label><br>
+            <input type="number" name="amount" class="form-control" step="any" required >
+            </div>
+        </div>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <input type="submit" class="btn btn-primary" value="Add New Sale">
-                                    </div>
-                                    </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal -->
-                                    <br>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Add New Sale">
+        </div>
+        </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+        <br>
     {{-- ********* ADD new sale ENDS HERE *********** --}}
 @endif
 
@@ -135,14 +135,17 @@
                         style="display:none;"
                     >
                         <select name="selectDataYear" id="selectYear" >
-                            @for($i = 2010;$i<2099;$i++)
+                        @foreach ($years as $year)
+                            <option value="{{$year}}">{{$year}}</option>
+                        @endforeach
+                            {{-- @for($i = 2010;$i<2099;$i++)
                                 @if($i == @ $selectedDataYear)
                                     <option selected value="{{@ $selectedDataYear}}">
                                         {{@ $selectedDataYear}}
                                     </option>
                                 @endif
                                 <option value="{{$i}}" >{{$i}}</option>
-                            @endfor
+                            @endfor --}}
                         </select>
                         <select name="selectDataQurater" id="showQuraters">
                             <option value="qAll" @if(@$selectedDataQuarter == 'qAll')selected @endif>All Quarters </option>
@@ -160,9 +163,9 @@
                     <select name="employee_id" id="" class="" required="TRUE">
                         <option value="all" >All</option>
                         @foreach ($employees as $employee)
-                            @if(@$employee_id == $employee->id)
+                            {{-- @if(@$employee_id == $employee->id)
                                 <option value="{{@$employee_id}}" selected>{{$employee->name}}</option>
-                            @endif
+                            @endif --}}
                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                         @endforeach
                     </select>
@@ -173,9 +176,9 @@
                 <select name="saletype_id" id="saletype_id" class="" required="TRUE">
                     <option value="all" selected>All selected</option>
                     @foreach ($saletypes as $saletype)
-                        @if(@$saletype_id == $saletype->id)
+                        {{-- @if(@$saletype_id == $saletype->id)
                             <option value="{{@$saletype_id}}" selected>{{$saletype->name}}</option>
-                        @endif
+                        @endif --}}
                         <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                     @endforeach
                 </select>
@@ -190,6 +193,22 @@
     </form>
 </div>
 {{-- Sort Data ends --}}
+<b>Report for</b>
+@if(@$selectedDataYear != null && @$showweekdata != 'on'){{ @$selectedDataYear}}@endif
+
+@if(@$range != null && @$showweekdata != 'on' && @$selectedQuarter != 'on')
+{{$range}}
+@endif
+
+@if(@$selectedDataQuarter == 'q1') {!! ', Quarter 1 ,'; !!} @endif
+@if(@$selectedDataQuarter == 'q2') {!! ', Quarter 2 ,'; !!} @endif
+@if(@$selectedDataQuarter == 'q3') {!! ', Quarter 3 ,'; !!} @endif
+@if(@$selectedDataQuarter == 'q4') {!! ', Quarter 4 ,'; !!} @endif
+<b>
+    @if(@$employeeName != null) {{@$employeeName->name.', '}} @else {!! ' all employees, ' !!} @endif
+</b>
+Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all sale types' !!} @endif
+</span>
 <div class="row">
     <!-- Column -->
     <div class="col-lg-3 col-md-6">
@@ -258,7 +277,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Manage sales</h4>
+                <h4 class="card-title">Reports sales</h4>
                 <h6 class="card-subtitle">Export data to Copy, Excel, PDF & Print</h6>
 
                 <div class="table-responsive m-t-40">
@@ -321,7 +340,7 @@
                                         <div class="form-group">
                                             <label for="">* Select Employee</label><br>
                                             <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                <option value="{{@$sale->employee->id}}" selected>{{@$sale->employee->name}}</option>
+                                                {{-- <option value="{{@$sale->employee->id}}" selected>{{@$sale->employee->name}}</option> --}}
                                                 @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}">{{$employee->name}}</option>
                                                 @endforeach
