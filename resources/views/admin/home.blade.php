@@ -329,7 +329,7 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
 
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-6">
         <div class="card card-body">
             <form action="@if($commission){{{route('admin.home.update', $commission)}}}@else{{{route('admin.home.store')}}}@endif" method="POST">
@@ -346,7 +346,7 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- ============================================================== -->
 
 

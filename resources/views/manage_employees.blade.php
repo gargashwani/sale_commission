@@ -79,24 +79,31 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="city" class="control-label">City:</label>
                                             <input type="text" class="form-control" id="city" name="city">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="state" class="control-label">State:</label>
                                             <input type="text" class="form-control" id="state" name="state">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="zip" class="control-label">Zip:</label>
                                             <input type="text" class="form-control" id="zip" name="zip">
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="commission" class="control-label">Commission:</label>
+                                            <input type="number" class="form-control" id="commission" name="commission" step="0.01" required>
+                                        </div>
+                                    </div>
+
                                 </div>
                         </div>
                         <div class="modal-footer">
@@ -120,6 +127,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>City</th>
+                                <th>Comm</th>
                                 <th>Status</th>
                                 @if(Auth::user()->user_role == 'admin')
                                 <th>Actions</th>
@@ -133,6 +141,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>City</th>
+                                <th>Comm</th>
                                 <th>Status</th>
                                 @if(Auth::user()->user_role == 'admin')
                                 <th>Actions</th>
@@ -150,6 +159,7 @@
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone }}</td>
                                     <td>{{ $employee->city }}</td>
+                                    <td>{{ $employee->commission }} %</td>
                                     <td>
                                         @php
                                             if($employee->status == 1)
@@ -234,25 +244,33 @@
 
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="city" class="control-label">City:</label><br>
                                                     <input type="text" class="form-control" id="city" name="city" value="{{ $employee->city }}">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="state" class="control-label">State:</label><br>
                                                     <input type="text" class="form-control" id="state" name="state" value="{{ $employee->state }}">
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="zip" class="control-label">Zip:</label><br>
                                                     <input type="text" class="form-control" id="zip" name="zip" value="{{ $employee->zip }}">
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="commission" class="control-label">Commission:</label><br>
+                                                    <input type="number" class="form-control" id="commission" name="commission" step="0.01"  value="{{ $employee->commission }}" required>
+                                                </div>
+                                            </div>
+
                                         </div>
                                 </div>
                                 <div class="modal-footer">

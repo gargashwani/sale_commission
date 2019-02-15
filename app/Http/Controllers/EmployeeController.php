@@ -61,7 +61,8 @@ class EmployeeController extends Controller
             'name'=>'required|min:2',
             'email'=>'required|min:5|unique:employees|email',
             'bgcolor'=>'required',
-            'bordercolor'=>'required'
+            'bordercolor'=>'required',
+            'commission'=>'required',
         ]);
 
         // dd($request);
@@ -77,7 +78,8 @@ class EmployeeController extends Controller
             'bgcolor' => $request->bgcolor,
             'bordercolor' => $request->bordercolor,
             'address' => $request->address,
-            'status' => '1'
+            'status' => '1',
+            'commission' => $request->commission,
         ]);
        }
     //    dd($employee);
@@ -129,6 +131,7 @@ class EmployeeController extends Controller
         $employee->address = $request->address;
         $employee->bgcolor = $request->bgcolor;
         $employee->bordercolor = $request->bordercolor;
+        $employee->commission = $request->commission;
         if ($request->status == 'on') {
             $employee->status = '1';
         }else{

@@ -25,6 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('bordercolor')->nullable();
             $table->char('zip', 20)->nullable();
             $table->char('phone', 20)->nullable();
+            $table->float('commission')->unsigned();
             $table->softDeletes();
             $table->timestamps();
         });

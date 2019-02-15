@@ -225,14 +225,17 @@ class SaleController extends Controller
             'dateofsale'=>'required'
         ]);
 
-        $commission = Commission::first();
-        // dump($commission );
+        // $commission = Commission::first();
+        // // dump($commission );
 
-        if($commission == NULL){
-            $comm = 0;
-        }else{
-            $comm = $commission->commission;
-        }
+        // if($commission == NULL){
+        //     $comm = 0;
+        // }else{
+        //     $comm = $commission->commission;
+        // }
+
+        $employee = Employee::where('id', $request->employee_id)->first();
+        // dd($employee->commission);
         // dd($commission->commission);
         $sale = Sale::create([
             'amount' => $request->amount,
@@ -240,7 +243,7 @@ class SaleController extends Controller
             'dateofsale'=>$request->dateofsale,
             'employee_id'=>$request->employee_id,
             'saletype_id'=>$request->saletype_id,
-            'commission' => ($request->amount)/100*$comm
+            'commission' => ($request->amount)/100*$employee->commission
         ]);
 
         if($sale){
@@ -288,20 +291,21 @@ class SaleController extends Controller
             'dateofsale'=>'required'
         ]);
 
-        $commission = Commission::first();
-        // dd($commission);
-        if(!$commission){
-            $comm = 0;
-        }else{
-            $comm = $commission->commission;
-        }
+        // $commission = Commission::first();
+        // // dd($commission);
+        // if(!$commission){
+        //     $comm = 0;
+        // }else{
+        //     $comm = $commission->commission;
+        // }
+        $employee = Employee::where('id', $request->employee_id)->first();
 
         $sale->amount = $request->amount;
         $sale->jobnumber = $request->jobnumber;
         $sale->dateofsale = $request->dateofsale;
         $sale->employee_id = $request->employee_id;
         $sale->saletype_id = $request->saletype_id;
-        $sale->commission = ($request->amount)/100*$comm;
+        $sale->commission = ($request->amount)/100*$employee->commission;
 
         if($sale->save())
             return redirect(route('admin.sale.index'))
