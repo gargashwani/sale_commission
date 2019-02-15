@@ -31,7 +31,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="description" class="control-label">Short description[Max. 200 chars]:</label>
-                                            <textarea name="description" id="description" cols="30" rows="5" class="form-control" maxlength="200" required></textarea>
+                                            <textarea name="description" id="description" cols="30" rows="5" class="form-control" maxlength="200"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">

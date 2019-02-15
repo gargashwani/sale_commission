@@ -14,8 +14,8 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label for="">* Select Employee</label>
-                                    <select name="employee_id" id="" class="form-control" required>
-                                        <option selected value="">Select an employee</option>
+                                    <select name="employee_id" id="" class="form-control" required="TRUE">
+                                        <option selected disabled>Select an employee</option>
                                         @foreach ($employees as $employee)
                                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                                         @endforeach
@@ -24,8 +24,8 @@
                             </div>
                             <div class="col-2">
                                 <label for="">* Sale Type</label>
-                                <select name="saletype_id" id="saletype_id" class="form-control" required>
-                                    <option selected value="">Select sale type</option>
+                                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
+                                    <option selected disabled>Select sale type</option>
                                     @foreach ($saletypes as $saletype)
                                         <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                                     @endforeach

@@ -36,7 +36,7 @@
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <section id="wrapper" class="login-register login-sidebar" style="background-image:url(http://23.254.209.156/~boylesadmin/assets/images/background/login-register.jpg);  background-size: 100% auto;background-color:green;background-position: left top;">
+    <section id="wrapper" class="login-register login-sidebar" style="background-image:url(../assets/images/background/login-register.jpg);">
         <div class="login-box card">
             <div class="card-body">
                 <form method="POST" action="{{ route('login') }}" class="form-horizontal form-material" id="loginform">
@@ -99,7 +99,7 @@
                     </div>
                     <div class="form-group ">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" required placeholder="Email">
+                            <input class="form-control" type="text" required="" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group text-center m-t-20">
