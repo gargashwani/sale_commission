@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Saletype;
+use App\Models\Saletype;
 use Illuminate\Http\Request;
 
 class SaletypeController extends Controller

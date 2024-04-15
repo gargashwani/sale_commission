@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Sale;
-use App\Employee;
-use App\Saletype;
-use App\Commission;
+use App\Models\Sale;
+use App\Models\Employee;
+use App\Models\Saletype;
+use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
