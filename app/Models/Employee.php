@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Sale;
-use App\User;
-use App\Saletype;
+use App\Models\Sale;
+use App\Models\User;
+use App\Models\Saletype;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -28,15 +28,15 @@ class Employee extends Authenticatable
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function sales()
     {
-        return $this->hasMany('App\Sale');
+        return $this->hasMany('App\Models\Sale');
     }
 
     public function saletypes(){
-        return $this->hasMany('App\Saletype');
+        return $this->hasMany('App\Models\Saletype');
     }
 }

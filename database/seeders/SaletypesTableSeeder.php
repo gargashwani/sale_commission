@@ -1,8 +1,10 @@
 <?php
+namespace Database\Seeders;
 
+use App\Models\Saletype;
 use Illuminate\Database\Seeder;
 
-class SalesTableSeeder extends Seeder
+class SaletypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +13,6 @@ class SalesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Sale::class, 200)->create();
+        Saletype::factory(10)->create();
     }
 }

@@ -1,6 +1,7 @@
 <?php
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +14,14 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Saletype::class, function (Faker $faker) {
-    return [
-        'name' => $faker->stateAbbr,
-        'description' => $faker->text,
-    ];
-});
+class SaletypeFactory  extends Factory{
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->stateAbbr,
+            'description' => fake()->text,
+        ];
+    }
+
+}
+

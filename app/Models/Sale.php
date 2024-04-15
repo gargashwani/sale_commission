@@ -1,15 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Sale;
-use App\User;
-use App\Employee;
+use App\Models\Employee;
+use App\Models\Saletype;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Saletype extends Model
+class Sale extends Model
 {
+    use Notifiable;
+
     use SoftDeletes;
 
     protected $guarded = [];
@@ -22,16 +24,15 @@ class Saletype extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function employee()
     {
-        return $this->belongsTo('App\Employee');
+        return $this->belongsTo('App\Models\Employee');
     }
 
-    public function sale()
-    {
-        return $this->hasMany('App\Sale');
+    public function saletype(){
+        return $this->belongsTo('App\Models\Saletype');
     }
 }

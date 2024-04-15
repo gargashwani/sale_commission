@@ -1,16 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Employee;
-use App\Saletype;
+use App\Models\Employee;
+use App\Models\Saletype;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -32,10 +33,10 @@ class User extends Authenticatable
 
     public function employee()
     {
-        return $this->hasMany('App\Employee');
+        return $this->hasMany('App\Models\Employee');
     }
 
     public function saletypes(){
-        return $this->hasMany('App\Saletype');
+        return $this->hasMany('App\Models\Saletype');
     }
 }

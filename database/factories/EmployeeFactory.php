@@ -1,6 +1,7 @@
 <?php
+namespace Database\Factories;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,17 +19,21 @@ use Faker\Generator as Faker;
 // 2 => Manager
 // 3 => Employees
 
-$factory->define(App\Employee::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'status' => '1',
-        'city' => $faker->city,
-        'state' => $faker->state,
-        'address' => $faker->streetAddress,
-        'zip' => $faker->postcode,
-        'phone' => $faker->e164PhoneNumber,
-        'bgcolor' => $faker->hexcolor,
-        'bordercolor' => $faker->hexcolor,
-    ];
-});
+class EmployeeFactory extends Factory{
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->name,
+            'email' => fake()->unique()->safeEmail,
+            'status' => '1',
+            'city' => fake()->city,
+            'state' => fake()->state,
+            'address' => fake()->streetAddress,
+            'zip' => fake()->postcode,
+            'phone' => fake()->e164PhoneNumber,
+            'bgcolor' => fake()->hexcolor,
+            'bordercolor' => fake()->hexcolor,
+        ];
+    }
+
+}
