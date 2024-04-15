@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -162,7 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
+        // Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
         /*
          * Package Service Providers...
          */
