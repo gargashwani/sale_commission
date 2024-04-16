@@ -7,7 +7,7 @@ use App\Models\Employee;
 use App\Models\Saletype;
 use App\Models\Commission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -49,10 +49,10 @@ class HomeController extends Controller
         $alltimeCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
         $alltimeSales = Sale::whereYear('dateofsale',date('Y'))->count();
 
-        Carbon::setWeekStartsAt(Carbon::SUNDAY);
-        Carbon::setWeekEndsAt(Carbon::SATURDAY);
-        $sunday = Carbon::now()->startOfWeek();
-        $saturday = Carbon::now()->endOfWeek();
+        // Carbon::setWeekStartsAt(Carbon::SUNDAY);
+        // Carbon::setWeekEndsAt(Carbon::SATURDAY);
+        $sunday = Carbon::now()->startOfWeek(\Carbon\WeekDay::Sunday);
+        $saturday = Carbon::now()->endOfWeek(\Carbon\WeekDay::Saturday);
         $thisweeksale = Sale::whereBetween('dateofsale', [$sunday, $saturday])->sum('amount');
         // dump($thisweeksale);
 
