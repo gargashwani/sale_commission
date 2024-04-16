@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SaletypeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SaletypeController;
 
 /*
 |--------------------------------------------------------------------------
