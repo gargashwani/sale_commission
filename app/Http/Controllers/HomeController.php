@@ -277,13 +277,36 @@ class HomeController extends Controller
         ]);
 
         return view('admin.home',
-        compact('totalEmployees','pageTitle','commission','totalSaleAmount'
-                ,'totalSales','totalCommission','employees','saletypes'
-                ,'salePerMonth','chartjs','selectedYear','selectedDataYear',
-            'selectedEmployee','selectedQuarter','selectedSaletype','rangeDataSelector'
-            ,'fromDate','toDate','dateRange','alltimeselector','allTime',
-            'alltimeSaleAmount','alltimeCommission','alltimeSales','years'
-            ,'selectedempname','saleTypeName','defaultdata'));
+        compact(
+            'totalEmployees',
+            'pageTitle',
+            'commission',
+            'totalSaleAmount',
+            'totalSales',
+            'totalCommission',
+            'employees',
+            'saletypes',
+            'salePerMonth',
+            'chartjs',
+            'selectedYear',
+            'selectedDataYear',
+            // 'selectedEmployee',
+            'selectedQuarter',
+            // 'selectedSaletype',
+            // 'rangeDataSelector',
+            // 'fromDate',
+            // 'toDate',
+            // 'dateRange',
+            'alltimeselector',
+            'allTime',
+            'alltimeSaleAmount',
+            'alltimeCommission',
+            'alltimeSales',
+            'years',
+            // 'selectedempname',
+            // 'saleTypeName',
+            'defaultdata'
+        ));
     }
 
 
