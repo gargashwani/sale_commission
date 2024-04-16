@@ -291,7 +291,7 @@ class HomeController extends Controller
             'selectedYear',
             'selectedDataYear',
             // 'selectedEmployee',
-            'selectedQuarter',
+            // 'selectedQuarter' ?? null,
             // 'selectedSaletype',
             // 'rangeDataSelector',
             // 'fromDate',
@@ -305,7 +305,7 @@ class HomeController extends Controller
             'years',
             // 'selectedempname',
             // 'saleTypeName',
-            'defaultdata'
+            // 'defaultdata'
         ));
     }
 
