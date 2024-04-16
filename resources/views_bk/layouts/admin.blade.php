@@ -285,7 +285,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer">
-                © 2019 {{ config('app.name')}} Developed By <a href="https://zuckerandzucker.com">Zuckerandzucker</a>
+                © 2024 {{ config('app.name')}} Developed By <a href="https://zuckerandzucker.com">Zuckerandzucker</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
