@@ -54,21 +54,20 @@ class HomeController extends Controller
         $sunday = Carbon::now()->startOfWeek(\Carbon\WeekDay::Sunday);
         $saturday = Carbon::now()->endOfWeek(\Carbon\WeekDay::Saturday);
         $thisweeksale = Sale::whereBetween('dateofsale', [$sunday, $saturday])->sum('amount');
-        // dump($thisweeksale);
-
         $query = Sale::query();
 
-        // dump($request->employee_id);
+        $selectedEmployee = null;
+        $selectedempname = null;
         if($request->employee_id != null){
             $selectedEmployee = $request->employee_id;
             $selectedempname = Employee::where('id',$request->employee_id)->first();
-            // dump($selectedempname->name);
             $query->when(request('employee_id') != 'all', function ($q) {
                 return $q->where('employee_id', request('employee_id'));
             });
         }
 
-        // dump($request->saletype_id);
+        $selectedSaletype = null;
+        $saleTypeName = null;
         if($request->saletype_id != null){
             $selectedSaletype = $request->saletype_id;
             $saleTypeName = Saletype::where('id',$request->saletype_id)->first();
@@ -78,27 +77,17 @@ class HomeController extends Controller
             });
         }
 
-        // if(@$request->alltimeselector == 'on'){
-        //     $alltimeselector = 'on';
-        // }
-
         $allTime = 'on';
-        // dump($request->alltimeselector);
         $alltimeselector = $request->alltimeselector;
         if($request->alltimeselector == 'on'){
             $allTime = 'on';
-            // dump($allTime);
         }elseif($request->alltimeselector == 0){
             $allTime = null;
         }
-        // dump($allTime);
         if($request->alltimeselector != 'on'){
-            // dump($request->rangeselector);
             if($request->rangeselector != 'on'){
-                // dump($request->selectDataYear);
                 if($request->selectDataYear != null){
                     $selectedDataYear = $request->selectDataYear;
-                    // dump($selectedDataYear);
                     $query->when(request('selectDataYear') != 'null', function ($q) {
                         return $q->whereYear('dateofsale', request('selectDataYear'));
                     });
@@ -110,10 +99,9 @@ class HomeController extends Controller
                     });
                 }
 
-                // dump($request->quarterselector);
+                $selectedQuarter = null;
                 if($request->quarterselector != 'on'){
                     $selectedQuarter = $request->selectDataQurater;
-                    // dump($selectedQuarter);
                     $selectQurater = $request->selectDataQurater;
                     $query->when(request('selectDataQurater') == 'q1', function ($q) {
                         return $q->whereIn(DB::raw('MONTH(dateofsale)'), [1,2,3]);
@@ -132,12 +120,13 @@ class HomeController extends Controller
                     });
 
                 }
-                // dd('ok');
             }
 
-
+            $rangeDataSelector = null;
+            $fromDate = null;
+            $toDate = null;
+            $dateRange = null;
             if($request->rangeselector == 'on'){
-                // dump($request->rangeselector);
                 $rangeDataSelector = $request->rangeselector;
                     $dateRange = $request->range;
                     $date = explode(" ", $request->range);
@@ -151,15 +140,9 @@ class HomeController extends Controller
                     $date2 = date('Y-m-d', strtotime($date[2]));
                     return $q->whereBetween('dateofsale', [ $date1, $date2]);
                 });
-                // dump($rangeDataSelector);
             }
 
         }
-        // $query->when(request('filter_by') == 'date', function ($q) {
-        //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
-        // });
-
-        // dump(date('m'));
 
         // For default selection of current quarter
         if($request->quarterselector != 'on' && $request->alltimeselector != 'on'
@@ -290,22 +273,22 @@ class HomeController extends Controller
             'chartjs',
             'selectedYear',
             'selectedDataYear',
-            // 'selectedEmployee',
-            // 'selectedQuarter' ?? null,
-            // 'selectedSaletype',
-            // 'rangeDataSelector',
-            // 'fromDate',
-            // 'toDate',
-            // 'dateRange',
+            'selectedEmployee',
+            'selectedQuarter' ?? null,
+            'selectedSaletype',
+            'rangeDataSelector',
+            'fromDate',
+            'toDate',
+            'dateRange',
             'alltimeselector',
             'allTime',
             'alltimeSaleAmount',
             'alltimeCommission',
             'alltimeSales',
             'years',
-            // 'selectedempname',
-            // 'saleTypeName',
-            // 'defaultdata'
+            'selectedempname',
+            'saleTypeName',
+            'defaultdata'
         ));
     }
 
