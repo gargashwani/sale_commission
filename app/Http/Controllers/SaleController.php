@@ -25,17 +25,13 @@ class SaleController extends Controller
         $totalCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
         $totalSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
         $totalSales = Sale::whereYear('dateofsale',date('Y'))->count();
-        // foreach ($totalSaleAmount as $key => $sale) {
-        //     dump($sale->amount);
-        // }
-        // dd($totalSaleAmount->amount);
+
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
         $saletypes = Saletype::where(['deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
-        // dd($saletypes);
 
        // to get dynamic years from sales record to show years
         $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
@@ -47,18 +43,23 @@ class SaleController extends Controller
             array_unshift($years, $key);
         }
 
-        return view('admin.sale.index', compact('sales','pageTitle','employees','saletypes'
-                                    ,'totalCommission','totalSaleAmount','totalSales','years'));
+        return view('admin.sale.index', compact(
+            'sales',
+            'pageTitle',
+            'employees',
+            'saletypes',
+            'totalCommission',
+            'totalSaleAmount',
+            'totalSales',
+            'years'
+        ));
     }
 
     public function getrange(Request $request){
-        // dump($request->range);
-        // dump($request->rangeselector);
-       // to get dynamic years from sales record to show years
-        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
-                                    ->groupBy(function($val) {
-                                        return Carbon::parse($val->dateofsale)->format('Y');
-                                    });
+        // to get dynamic years from sales record to show years
+        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()->groupBy(function($val) {
+            return Carbon::parse($val->dateofsale)->format('Y');
+        });
         $years = [];
         foreach ($salesds as $key => $year) {
             array_unshift($years, $key);
@@ -82,8 +83,8 @@ class SaleController extends Controller
             return $q->where('saletype_id', request('saletype_id'));
         });
 
-        // dump($request->quarterselector);
-
+        $selectedDataYear = '';
+        $selectedDataQuarter = '';
         if($request->quarterselector == 'on'){
             $selectedQuarter = 'on';
             $selectedDataYear = $request->selectDataYear;
@@ -111,17 +112,17 @@ class SaleController extends Controller
                 return $q->whereIn(DB::raw('MONTH(dateofsale)'), [10,11,12]);
             });
         }
-
+        $showweekdata = 'off';
+        $weektype = '';
+        $selectedQuarter = 'off';
         if($request->showweekdata == 'on'  && $request->quarterselector != 'on'){
             $showweekdata = 'on';
             $weektype = $request->weekdata;
             $query->when(request('weekdata') == 'thisweek', function ($q) {
                 return $q->whereYear('dateofsale',date('Y'))->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear);
-                // return $q->whereBetween('dateofsale', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('amount');
             });
             $query->when(request('weekdata') == 'lastweek', function ($q) {
                 return $q->whereYear('dateofsale',date('Y'))->where(\DB::raw("WEEKOFYEAR(dateofsale)"), Carbon::now()->weekOfYear-1);
-                // return $q->whereBetween('dateofsale', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('amount');
             });
 
         }
@@ -131,15 +132,8 @@ class SaleController extends Controller
             $range = $request->range;
             $rangeDataSelector = $request->rangeselector;
         }
-        // dump($range);
-        // dump($rangeselector);
-        // dump($request->showweekdata );
-            // dump($request->range);
-            // dump($request->weekdata);
-            // dump($request->showweekdata);
-        // if($request->showweekdata != null && $request->range != null){
+ 
         if( $request->range != null && $request->showweekdata == null && $request->quarterselector != 'on'){
-            // dump($request->range);
             $date = explode(" ", $request->range);
             $fromDate = date('Y-m-d', strtotime($date[0]));
             $toDate = date('Y-m-d', strtotime($date[2]));
@@ -151,15 +145,12 @@ class SaleController extends Controller
                 return $q->whereBetween('dateofsale', [ $date1, $date2]);
             });
         }
-        // $query->when(request('filter_by') == 'date', function ($q) {
-        //     return $q->orderBy('created_at', request('ordering_rule', 'desc'));
-        // });
+
         $totalCommission = $query->sum('commission');
         $totalSaleAmount = $query->sum('amount');
         $totalSales = $query->count();
 
         $sales = $query->get();
-        // dd($sales);
 
         $pageTitle = 'Sales';
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
@@ -168,14 +159,31 @@ class SaleController extends Controller
         $saletypes = Saletype::where(['deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
-        // dd($saletypes);
-        return view('admin.sale.index', compact('sales','pageTitle'
-                    ,'employees','saletypes','showweekdata','weektype'
-                    ,'saletype_id', 'employee_id','rangeselector','range'
-                    ,'selectedQuarter','selectedDataYear','selectedDataQuarter'
-                    ,'totalSaleAmount','totalCommission','totalSales','years'
-                    ,'employeeName','saleTypeName','fromDate','toDate',
-                'range'));
+
+           return view('admin.sale.index', compact(
+            'sales',
+            'pageTitle',
+            'employees',
+            'saletypes',
+            'showweekdata',
+            'weektype',
+            'saletype_id',
+            'employee_id',
+            'rangeselector',
+            'range',
+            'selectedQuarter',
+            'selectedDataYear',
+            'selectedDataQuarter',
+            'totalSaleAmount',
+            'totalCommission',
+            'totalSales',
+            'years',
+            'employeeName',
+            'saleTypeName',
+            'fromDate',
+            'toDate',
+            'range'
+        ));
 
     }
 
@@ -203,7 +211,6 @@ class SaleController extends Controller
                                 ->whereYear('dateofsale', $currentYear)
                                 ->sum('amount');
 
-        // dd($lastMonthAmount);
         Session::put('thisMonthAmount',$thisMonthAmount);
         Session::put('lastMonthAmount',$lastMonthAmount);
 
@@ -218,25 +225,13 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $validators = $request->validate([
             'amount'=>'required',
             'jobnumber'=>'integer|required|unique:sales',
             'dateofsale'=>'required'
         ]);
 
-        // $commission = Commission::first();
-        // // dump($commission );
-
-        // if($commission == NULL){
-        //     $comm = 0;
-        // }else{
-        //     $comm = $commission->commission;
-        // }
-
         $employee = Employee::where('id', $request->employee_id)->first();
-        // dd($employee->commission);
-        // dd($commission->commission);
         $sale = Sale::create([
             'amount' => $request->amount,
             'jobnumber'=>$request->jobnumber,
@@ -253,51 +248,14 @@ class SaleController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Sale  $sale
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Sale  $sale
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Sale  $sale
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Sale $sale)
     {
-        // dump($request);
         $validators = $request->validate([
             'amount'=>'required',
             'jobnumber' => 'required|unique:sales,jobnumber,'.$sale->jobnumber.',jobnumber',
             'dateofsale'=>'required'
         ]);
 
-        // $commission = Commission::first();
-        // // dd($commission);
-        // if(!$commission){
-        //     $comm = 0;
-        // }else{
-        //     $comm = $commission->commission;
-        // }
         $employee = Employee::where('id', $request->employee_id)->first();
 
         $sale->amount = $request->amount;
@@ -311,18 +269,10 @@ class SaleController extends Controller
             return redirect(route('admin.sale.index'))
             ->with(['sales','pageTitle','employees','saletypes'])
             ->with('message','Record Successfully Updated!');
-
-            // return back()->with('message','Record Successfully Updated!');
         else
             return back()->with('message', 'Error Updating Category');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Sale  $sale
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Sale $sale)
     {
         // this method deletes the record from the database permanently
@@ -330,7 +280,6 @@ class SaleController extends Controller
             return redirect(route('admin.sale.index'))
             ->with(['sales','pageTitle','employees','saletypes'])
             ->with('message','Record Successfully Deleted!');
-            // return back()->with('message','Record Successfully Deleted!');
         }else{
             return back()->with('message','Error Deleting Record');
         }
