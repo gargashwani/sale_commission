@@ -2,6 +2,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\SalesTableSeeder;
+use Database\Seeders\UsersTableSeeder;
+use Database\Seeders\EmployeesTableSeeder;
+use Database\Seeders\SaletypesTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {

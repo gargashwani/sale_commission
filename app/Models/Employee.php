@@ -9,10 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Employee extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
      use SoftDeletes;
     //because all the fields are guarded by default, so we are making them free from guard
      protected $guarded = [];

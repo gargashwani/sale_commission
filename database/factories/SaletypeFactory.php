@@ -18,8 +18,8 @@ class SaletypeFactory  extends Factory{
     public function definition(): array
     {
         return [
-            'name' => fake()->stateAbbr,
-            'description' => fake()->text,
+            'name' => fake()->name(),
+            'description' => "This is a description of the sale type.",
         ];
     }
 

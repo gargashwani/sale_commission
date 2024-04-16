@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaletypeController;
 
 /*
@@ -25,7 +27,7 @@ Auth::routes([
     // 'register' => false
 ]);
 
-Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin'], function(){
+Route::group(['as'=>'admin.', 'middleware'=>['auth'], 'prefix'=>'admin'], function(){
 
 	Route::get('employee/{employee}/remove',[EmployeeController::class, 'remove'])->name('employee.remove');
 	Route::get('employee/trash', [EmployeeController::class, 'trash'])->name('employee.trash');
@@ -35,27 +37,27 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth','admin'], 'prefix'=>'admin']
 	Route::get('saletype/trash', [SaletypeController::class, 'trash'])->name('saletype.trash');
     Route::get('saletype/recover/{id}', [SaletypeController::class, 'recoverSaletype'])->name('saletype.recover');
 
-	Route::get('sale/{sale}/remove','SaleController@remove')->name('sale.remove');
-	Route::get('sale/trash', 'SaleController@trash')->name('sale.trash');
-    Route::get('sale/recover/{id}', 'SaleController@recoverSale')->name('sale.recover');
+	Route::get('sale/{sale}/remove',[SaleController::class, 'remove'])->name('sale.remove');
+	Route::get('sale/trash', [SaleController::class, 'trash'])->name('sale.trash');
+    Route::get('sale/recover/{id}', [SaleController::class, 'recoverSale'])->name('sale.recover');
 
-    Route::post('sale/sortdata', 'SaleController@getrange')->name('sale.getrange');
+    Route::post('sale/sortdata', [SaleController::class, 'getrange'])->name('sale.getrange');
     Route::post('home/sortdata', [HomeController::class, 'index'])->name('home.getrange');
 
     // On home.blade.php
     Route::PUT('home/getdatabyyear', [HomeController::class, 'index'])->name('home.getdatabyyear');
 
 
-    Route::get('/managerprofile', 'ProfileController@getmanager')->name('managerprofile');
-    Route::PUT('/managerprofile', 'ProfileController@update')->name('managerprofile.update');
-    Route::PUT('/managerprofile/updatepassword', 'ProfileController@updatepassword')->name('managerprofile.updatepassword');
+    Route::get('/managerprofile', [ProfileController::class, 'getmanager'])->name('managerprofile');
+    Route::PUT('/managerprofile', [ProfileController::class, 'update'])->name('managerprofile.update');
+    Route::PUT('/managerprofile/updatepassword', [ProfileController::class, 'updatepassword'])->name('managerprofile.updatepassword');
 
-    Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::PUT('/profile', 'ProfileController@update')->name('profile.update');
-    Route::PUT('/profile/updatepassword', 'ProfileController@updatepassword')->name('profile.updatepassword');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::PUT('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::PUT('/profile/updatepassword', [ProfileController::class, 'updatepassword'])->name('profile.updatepassword');
 
-	Route::resource('/home','HomeController');
-	Route::resource('/employee','EmployeeController');
-	Route::resource('/sale','SaleController');
-	Route::resource('/saletype','SaletypeController');
+	Route::resource('/home',HomeController::class);
+	Route::resource('/employee',EmployeeController::class);
+	Route::resource('/sale',SaleController::class);
+	Route::resource('/saletype',SaletypeController::class);
 });

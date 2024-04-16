@@ -1,8 +1,8 @@
 <?php
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -30,7 +30,7 @@ class EmployeeFactory extends Factory{
             'state' => fake()->state,
             'address' => fake()->streetAddress,
             'zip' => fake()->postcode,
-            'phone' => fake()->e164PhoneNumber,
+            'phone' => fake()->phoneNumber,
             'bgcolor' => fake()->hexcolor,
             'bordercolor' => fake()->hexcolor,
         ];

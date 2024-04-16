@@ -7,10 +7,10 @@ use App\Models\Saletype;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Sale extends Model
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     use SoftDeletes;
 
