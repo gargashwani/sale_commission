@@ -315,14 +315,12 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                                     <td>{{ $sale->jobnumber }}</td>
                                     <td>{{ @$sale->employee->name }}</td>
                                     <td>{{ @$sale->saletype->name }}</td>
-                                    {{-- Y-m-d Format --}}
                                     <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
                                     <td>{{ number_format($sale->amount,2) }}</td>
                                     <td>{{ number_format($sale->commission,2) }}</td>
                                     <td>{{ number_format($sale->amount - $sale->commission,2) }}</td>
 
                                     <td>
-                                        {{-- ********* EDIT STARTS HERE********** --}}
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#updatesale{{$sale->id}}" data-whatever="@mdo">Edit</button>
                                         <div class="modal fade" id="updatesale{{$sale->id}}" tabindex="-1" role="dialog" aria-labelledby="updatesale{{$sale->id}}Label1">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -340,7 +338,6 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                                                                 <div class="form-group">
                                                                     <label for="">* Select Employee</label><br>
                                                                     <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                                        {{-- <option value="{{@$sale->employee->id}}" selected>{{@$sale->employee->name}}</option> --}}
                                                                         @foreach ($employees as $employee)
                                                                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                                                                         @endforeach
@@ -382,8 +379,6 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- ********* EDIT ENDS HERE *********** --}}
-                                        {{--  this is for permanant delete  --}}
                                         <a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{$sale->id}}')">Delete</a>
                                             <form id="delete-sale-{{$sale->id}}"
                                                 action="{{ route('admin.sale.destroy', $sale->id) }}"

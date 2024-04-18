@@ -21,7 +21,8 @@ class SaleController extends Controller
     public function index()
     {
         $pageTitle = 'Sales';
-        $sales = Sale::all();
+        // $sales = Sale::all();
+        $sales =  Sale::whereYear('dateofsale',date('Y-m'))->get();
         $totalCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
         $totalSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
         $totalSales = Sale::whereYear('dateofsale',date('Y'))->count();
@@ -126,13 +127,15 @@ class SaleController extends Controller
             });
 
         }
-
+        $rangeselector = 'off';
+        $range = '';
         if($request->rangeselector  != 'on'){
             $rangeselector = $request->rangeselector;
             $range = $request->range;
             $rangeDataSelector = $request->rangeselector;
         }
- 
+        $fromDate = '';
+        $toDate = '';
         if( $request->range != null && $request->showweekdata == null && $request->quarterselector != 'on'){
             $date = explode(" ", $request->range);
             $fromDate = date('Y-m-d', strtotime($date[0]));
