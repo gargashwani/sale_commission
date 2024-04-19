@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                  Boyle's  Sales Commission TRACKER
+                  Boyle's Sales Commission Tracker
                 </div>
 
                 <div class="links">

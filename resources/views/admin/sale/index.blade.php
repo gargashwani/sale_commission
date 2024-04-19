@@ -15,7 +15,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     <form method="POST" action="{{route('admin.sale.store')}}">
-    @csrf
+        @csrf
         <div class="modal-body">
         <div class="row">
             <div class="col-4">
@@ -57,13 +57,11 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <input type="submit" class="btn btn-primary" value="Add New Sale">
         </div>
-        </form>
+    </form>
                 </div>
             </div>
         </div>
-        <!-- /.modal -->
         <br>
-    {{-- ********* ADD new sale ENDS HERE *********** --}}
 @endif
 
     <form action="{{route('admin.sale.getrange')}}" method="POST">
@@ -138,14 +136,6 @@
                         @foreach ($years as $year)
                             <option value="{{$year}}">{{$year}}</option>
                         @endforeach
-                            {{-- @for($i = 2010;$i<2099;$i++)
-                                @if($i == @ $selectedDataYear)
-                                    <option selected value="{{@ $selectedDataYear}}">
-                                        {{@ $selectedDataYear}}
-                                    </option>
-                                @endif
-                                <option value="{{$i}}" >{{$i}}</option>
-                            @endfor --}}
                         </select>
                         <select name="selectDataQurater" id="showQuraters">
                             <option value="qAll" @if(@$selectedDataQuarter == 'qAll')selected @endif>All Quarters </option>
@@ -279,7 +269,37 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
             <div class="card-body">
                 <h4 class="card-title">Reports sales</h4>
                 <h6 class="card-subtitle">Export data to Copy, Excel, PDF & Print</h6>
+                <form action="{{route('admin.sale.report_filter')}}" method="post">
+                    @csrf
+                    <select name="selectedReportYear">
 
+                        @foreach ($years as $year)
+                            @if ($selectedReportYear == $year)
+                                <option value="{{$year}}" selected>{{$year}}</option>
+                            @else
+                                <option value="{{$year}}">{{$year}}</option>
+                            @endif
+                        @endforeach
+                    
+
+                        </select>
+                        <select name="selectedReportMonth">
+                            <option value="all" @if(@$selectedReportMonth == 'all')selected @endif>Full Year</option>
+                            <option value="1" @if(@$selectedReportMonth == '1')selected @endif>January</option>
+                            <option value="2" @if(@$selectedReportMonth == '2')selected @endif>February</option>
+                            <option value="3" @if(@$selectedReportMonth == '3')selected @endif>March</option>
+                            <option value="4" @if(@$selectedReportMonth == '4')selected @endif>April</option>
+                            <option value="5" @if(@$selectedReportMonth == '5')selected @endif>May</option>
+                            <option value="6" @if(@$selectedReportMonth == '6')selected @endif>June</option>
+                            <option value="7" @if(@$selectedReportMonth == '7')selected @endif>July</option>
+                            <option value="8" @if(@$selectedReportMonth == '8')selected @endif>August</option>
+                            <option value="9" @if(@$selectedReportMonth == '9')selected @endif>September</option>
+                            <option value="10" @if(@$selectedReportMonth == '10')selected @endif>October</option>
+                            <option value="11" @if(@$selectedReportMonth == '11')selected @endif>November</option>
+                            <option value="12" @if(@$selectedReportMonth == '12')selected @endif>December</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                </form>
                 <div class="table-responsive m-t-40">
                     <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>

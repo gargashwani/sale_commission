@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 
 Auth::routes([
-    // 'register' => false
+    'register' => false
 ]);
 
 Route::group(['as'=>'admin.', 'middleware'=>['auth'], 'prefix'=>'admin'], function(){
@@ -59,5 +59,6 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth'], 'prefix'=>'admin'], functi
 	Route::resource('/home',HomeController::class);
 	Route::resource('/employee',EmployeeController::class);
 	Route::resource('/sale',SaleController::class);
+    Route::post('/sale/report_filter', [SaleController::class, 'report_filter'])->name('sale.report_filter');
 	Route::resource('/saletype',SaletypeController::class);
 });

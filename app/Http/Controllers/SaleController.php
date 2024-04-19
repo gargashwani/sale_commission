@@ -35,13 +35,17 @@ class SaleController extends Controller
            ->get();
 
        // to get dynamic years from sales record to show years
-        $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
-                                    ->groupBy(function($val) {
-                                        return Carbon::parse($val->dateofsale)->format('Y');
-                                    });
+        $salesds = Sale::orderBy('dateofsale', 'DESC')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->dateofsale)->format('Y');
+        });
+        
         $years = [];
+        
         foreach ($salesds as $key => $year) {
-            array_unshift($years, $key);
+            // array_unshift($years, $key);
+            array_push($years, $key);
         }
 
         return view('admin.sale.index', compact(
@@ -56,12 +60,75 @@ class SaleController extends Controller
         ));
     }
 
+    public function report_filter(Request $request)
+    {
+        $data = $request->all();
+        $selectedReportYear = $request->selectedReportYear;
+        $selectedReportMonth = $request->selectedReportMonth;
+        // dump($data);
+        $pageTitle = 'Sales';
+        $query =  Sale::query();
+        if($selectedReportYear != null){
+            $query->whereYear('dateofsale',$selectedReportYear);
+        }
+        else{
+            $query->whereYear('dateofsale',date('Y'));
+        }
+
+        // Filter By Month
+        if($selectedReportMonth != null && $selectedReportMonth != 'all'){
+            $query->whereMonth('dateofsale',$selectedReportMonth);
+        }
+        $sales = $query->get();
+        // dd($sales);
+        $totalCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
+        $totalSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
+        $totalSales = Sale::whereYear('dateofsale',date('Y'))->count();
+
+        $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        $saletypes = Saletype::where(['deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+
+       // to get dynamic years from sales record to show years
+        $salesds = Sale::orderBy('dateofsale', 'DESC')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->dateofsale)->format('Y');
+        });
+        
+        $years = [];
+        
+        foreach ($salesds as $key => $year) {
+            // array_unshift($years, $key);
+            array_push($years, $key);
+        }
+
+        return view('admin.sale.index', compact(
+            'sales',
+            'pageTitle',
+            'employees',
+            'saletypes',
+            'totalCommission',
+            'totalSaleAmount',
+            'totalSales',
+            'years',
+            'selectedReportYear',
+            'selectedReportMonth'
+        ));
+    }
+
+
     public function getrange(Request $request){
         // to get dynamic years from sales record to show years
         $salesds = Sale::orderBy('dateofsale', 'DESC')->get()->groupBy(function($val) {
             return Carbon::parse($val->dateofsale)->format('Y');
         });
+        
         $years = [];
+        
         foreach ($salesds as $key => $year) {
             array_unshift($years, $key);
         }
@@ -72,6 +139,7 @@ class SaleController extends Controller
             $employee_id = $request->employee_id;
             $employeeName = Employee::where('id',$request->employee_id)->first();
         }
+        
         $query->when(request('employee_id') != 'all', function ($q) {
             return $q->where('employee_id', request('employee_id'));
         });
@@ -80,6 +148,7 @@ class SaleController extends Controller
             $saletype_id = $request->saletype_id;
             $saleTypeName = Saletype::where('id',$request->saletype_id)->first();
         }
+        
         $query->when(request('saletype_id') != 'all', function ($q) {
             return $q->where('saletype_id', request('saletype_id'));
         });
