@@ -238,7 +238,9 @@ class SaleController extends Controller
         $saletypes = Saletype::where(['deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
-
+        
+        $selectedReportYear = date('Y');
+        $selectedReportMonth = date('m');
            return view('admin.sale.index', compact(
             'sales',
             'pageTitle',
@@ -261,7 +263,9 @@ class SaleController extends Controller
             'saleTypeName',
             'fromDate',
             'toDate',
-            'range'
+            'range',
+            'selectedReportYear',
+            'selectedReportMonth'
         ));
 
     }
