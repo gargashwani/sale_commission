@@ -16,9 +16,7 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('employee_id');
-            // $table->foreign('employee_id')->references('id')->on('employees');
             $table->unsignedInteger('saletype_id');
-            // $table->foreign('employee_id')->references('id')->on('employees');
             $table->unsignedInteger('jobnumber')->unique();;
             $table->float('amount');
             $table->float('commission');
