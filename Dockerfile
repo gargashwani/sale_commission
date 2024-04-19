@@ -1,0 +1,45 @@
+FROM ubuntu:22.04
+# FROM --platform=linux/amd64 ubuntu:22.04
+
+# Set ulimit for maximum number of open files
+RUN ulimit -n 65536
+
+# make the 'app' folder the current working directory
+WORKDIR /var/www/html
+
+# install packages
+RUN apt-get update -y && \
+    apt-get install -y gnupg2 && \
+    apt-get install -y libpng-dev && \
+    apt-get install -y cron && \
+    apt-get install -y curl && \
+    apt-get install -y redis-server && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ondrej/php && \
+    apt-get install -y supervisor && \
+    apt-get install -y vim && \
+    apt-get install -y php8.2-cli php8.2-fpm php8.2-curl php8.2-gd php8.2-mbstring zip unzip php8.2-mysql && \
+    apt-get install mysql-client -y && \
+    apt-get install php8.2-mongodb -y && \
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/bin --filename=composer
+
+# installing project dependencies
+RUN apt-get update && apt-get install -y \
+        php8.2-intl \
+        php8.2-xml \
+        php8.2-gd \
+        php8.2-mbstring \
+        php8.2-zip \
+        nginx \
+        libapache2-mod-php8.2
+
+COPY app.conf /etc/nginx/sites-enabled/default
+COPY queue-worker.conf /etc/supervisor/conf.d/queue-worker.conf
+COPY horizon.conf /etc/supervisor/conf.d/horizon.conf
+
+# This php.ini file has updated memory_limit
+COPY phpini.conf /etc/php/8.2/fpm/php.ini
+
+CMD ["php-fpm"]
+
