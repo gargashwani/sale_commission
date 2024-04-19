@@ -22,6 +22,8 @@ class SaleController extends Controller
     {
         $pageTitle = 'Sales';
         // $sales = Sale::all();
+        $selectedReportYear = date('Y');
+        $selectedReportMonth = date('m');
         $sales =  Sale::whereYear('dateofsale',date('Y-m'))->get();
         $totalCommission = Sale::whereYear('dateofsale',date('Y'))->sum('commission');
         $totalSaleAmount = Sale::whereYear('dateofsale',date('Y'))->sum('amount');
@@ -56,7 +58,9 @@ class SaleController extends Controller
             'totalCommission',
             'totalSaleAmount',
             'totalSales',
-            'years'
+            'years',
+            'selectedReportMonth',
+            'selectedReportYear'
         ));
     }
 
@@ -72,12 +76,15 @@ class SaleController extends Controller
             $query->whereYear('dateofsale',$selectedReportYear);
         }
         else{
+            $selectedReportYear = date('Y');
             $query->whereYear('dateofsale',date('Y'));
         }
 
         // Filter By Month
         if($selectedReportMonth != null && $selectedReportMonth != 'all'){
             $query->whereMonth('dateofsale',$selectedReportMonth);
+        }else{
+            $selectedReportMonth = date('m');
         }
         $sales = $query->get();
         // dd($sales);
