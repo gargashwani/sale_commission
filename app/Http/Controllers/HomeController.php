@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        // $salesYearMonthComparisonChart = SELF::SalesYearMonthComparisonChart();
+        $salesYearMonthComparisonChart = SELF::SalesYearMonthComparisonChart();
         $pageTitle = 'Dashboard';
 
         $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
@@ -31,7 +31,7 @@ class HomeController extends Controller
                                     });
         $years = [];
         foreach ($salesds as $key => $year) {
-            array_unshift($years, $key);
+            array_push($years, $key);
         }
 
         // dd($years);
@@ -218,7 +218,7 @@ class HomeController extends Controller
             ];
             array_push($datasets, $dataset);
         }
-        dd($datasets);
+        // dd($datasets);
         $chartjs = app()->chartjs
         ->name('lineChartTest')
         ->type('bar')
@@ -276,35 +276,82 @@ class HomeController extends Controller
             'selectedempname',
             'saleTypeName',
             'defaultdata',
-            // 'salesYearMonthComparisonChart'
+            'salesYearMonthComparisonChart'
         ));
     }
 
     public function SalesYearMonthComparisonChart()
     {
         // Fetch data from the database
-        $salesData = Sale::selectRaw('SUM(amount) as total_amount, MONTH(dateofsale) as month')
-                         ->groupBy('month')
+        $salesData = Sale::selectRaw('YEAR(dateofsale) as year, MONTH(dateofsale) as month, SUM(amount) as total_amount')
+                         ->groupBy('year', 'month')
+                         ->orderBy('year')
                          ->orderBy('month')
                          ->get();
-
+    
         // Extracting data for the chart
-        $labels = [];
-        $data = [];
-
+        $years = [];
+        $months = range(1, 12); // All months from 1 to 12
+        $datasets = [];
+    
         foreach ($salesData as $sale) {
-            $labels[] = date('F', mktime(0, 0, 0, $sale->month, 1));
-            $data[] = $sale->total_amount;
+            $year = $sale->year;
+            $month = $sale->month;
+            $totalAmount = round($sale->total_amount, 2); // Round total amount to 2 decimal places
+    
+            // If the year is not yet recorded, add it to the years array
+            if (!in_array($year, $years)) {
+                $years[] = $year;
+                // Initialize dataset for this year with 0 values for each month
+                $datasets[$year] = array_fill(0, 12, 0);
+            }
+    
+            // Update the sales amount for the corresponding month in the dataset
+            $datasets[$year][$month - 1] = $totalAmount; // Month is 1-indexed, so subtract 1 to make it 0-indexed
         }
-
-        // Setting up the chart dataset
-        $this->labels($labels)
-             ->dataset('Total Sales', 'line', $data)
-             ->options([
-                 'responsive' => true,
-                 // Add other Chart.js options as needed
-             ]);
+    
+        // Convert datasets array into the format expected by the Chart.js library
+        $chartDatasets = [];
+        $colors = ['#FF5733', '#33FF57', '#5733FF', '#FF33C8', '#33FFC8', '#C8FF33', '#FFC833', '#C833FF', '#33C8FF', '#33FF57', '#57FF33', '#3357FF'];
+        foreach ($years as $index => $year) {
+            $highlight = ($year == date('Y')) ? true : false; // Check if it's the current year
+            $chartDatasets[] = [
+                'label' => 'Year ' . $year,
+                'data' => $datasets[$year],
+                'borderColor' => $highlight ? '#FF5733' : $colors[$index % count($colors)], // Highlight color for the current year, else cycle through colors
+                'backgroundColor' => 'transparent', // No background color
+                'borderWidth' => $highlight ? 3 : 1, // Increase border width for the current year
+            ];
+        }
+    
+        return app()->chartjs
+            ->name('salesYearMonthComparisonChart')
+            ->type('line')
+            ->size(['width' => 600, 'height' => 200])
+            ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
+            ->datasets($chartDatasets)
+            ->optionsRaw([
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => '#000'
+                    ]
+                ],
+                'scales' => [
+                    'xAxes' => [
+                        [
+                            'stacked' => false,
+                            'gridLines' => [
+                                'display' => true
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
     }
+    
+
+    
 
     public function getrange(Request $request){
 

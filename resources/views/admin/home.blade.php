@@ -272,7 +272,11 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                         <div class="col-md-3">
                             <select name="selectYear" id="selectYear" onchange="this.form.submit()">
                             @foreach ($years as $year)
-                                <option value="{{$year}}">{{$year}}</option>
+                                @if ($selectedYear == $year)
+                                    <option value="{{$year}}" selected>{{$year}}</option>
+                                @else
+                                    <option value="{{$year}}">{{$year}}</option>
+                                @endif
                             @endforeach
                             </select>
                         </div>
@@ -283,14 +287,20 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
             <div style="width:100%;">
                 {!! $chartjs->render() !!}
             </div>
-            <div style="width:100%;">
-                {!! $salesYearMonthComparisonChart->render() !!}
-            </div>
+
 
         </div>
     </div>
 </div>
-
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div style="width:100%;">
+                {!! $salesYearMonthComparisonChart->render() !!}
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
 
