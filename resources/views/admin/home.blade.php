@@ -75,21 +75,6 @@
 <div class="card-body">
     <form action="{{route('admin.home.getrange')}}" method="POST">
         @csrf
-        {{-- <div class="row">
-            <div class="col-12">
-                {{$allTime}}
-                <div class="switch">
-                    <label><b>All Time</b> ->
-                        <input type="checkbox" name="alltimeselector" id="alltimeselector"
-                        @if($allTime == 'on')
-                        checked
-                        @endif
-                        >
-                        Off<span class="lever"></span>On</label>
-                </div>
-            </div>
-        </div> --}}
-
         <div class="row">
             <div class="col-3">
                 <div class="form-group" >
@@ -132,14 +117,6 @@
                         @foreach ($years as $year)
                             <option value="{{$year}}">{{$year}}</option>
                         @endforeach
-                        {{-- @for($i = 2010;$i<2099;$i++)
-                            @if($i == @ $selectedDataYear)
-                                <option selected value="{{@ $selectedDataYear}}">
-                                    {{@ $selectedDataYear}}
-                                </option>
-                            @endif
-                            <option value="{{$i}}" >{{$i}}</option>
-                        @endfor --}}
                     </select>
                     <select name="selectDataQurater" id="showQuraters"
                     @if(@$selectedQuarter == null)
@@ -161,9 +138,6 @@
                     <select name="employee_id" id="" class="" required="TRUE">
                         <option value="all" selected>All selected</option>
                         @foreach ($employees as $employee)
-                            {{-- @if(@$selectedEmployee == $employee->id)
-                                <option value="{{@$selectedEmployee}}" selected>{{@$employee->name}}</option>
-                            @endif --}}
                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                         @endforeach
                     </select>
@@ -174,9 +148,6 @@
                 <select name="saletype_id" id="saletype_id" class="" required="TRUE">
                     <option value="all" selected>All selected</option>
                     @foreach ($saletypes as $saletype)
-                        {{-- @if(@$selectedSaletype == $saletype->id)
-                            <option value="{{@$selectedSaletype}}" selected>{{@$saletype->name}}</option>
-                        @endif --}}
                         <option value="{{$saletype->id}}">{{$saletype->name}}</option>
                     @endforeach
                 </select>
@@ -300,19 +271,9 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                         @method('PUT')
                         <div class="col-md-3">
                             <select name="selectYear" id="selectYear" onchange="this.form.submit()">
-                                {{-- <option selected disabled>Select an year</option> --}}
-
-                        @foreach ($years as $year)
-                            <option value="{{$year}}">{{$year}}</option>
-                        @endforeach
-                                {{-- @for($i = 2010;$i<2099;$i++)
-                                    @if($i == @ $selectedYear)
-                                        <option selected value="{{@ $selectedYear}}">
-                                            {{@ $selectedYear}}
-                                        </option>
-                                    @endif
-                                   <option value="{{$i}}" >{{$i}}</option>
-                                @endfor --}}
+                            @foreach ($years as $year)
+                                <option value="{{$year}}">{{$year}}</option>
+                            @endforeach
                             </select>
                         </div>
 
@@ -322,34 +283,16 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
             <div style="width:100%;">
                 {!! $chartjs->render() !!}
             </div>
+            <div style="width:100%;">
+                {!! $salesYearMonthComparisonChart->render() !!}
+            </div>
+
         </div>
     </div>
 </div>
 
 
 </div>
-
-{{-- <div class="row">
-    <div class="col-6">
-        <div class="card card-body">
-            <form action="@if($commission){{{route('admin.home.update', $commission)}}}@else{{{route('admin.home.store')}}}@endif" method="POST">
-                @csrf
-                @if($commission)
-                    @method('PUT')
-                @endif
-                <div class="form-group">
-                        <label for="">Commission</label>
-                        <input type="number" name="commission" class='form-control' step="any"
-                        value="{{@$commission->commission}}">
-                    </div>
-                    <input type="submit" value="Submit" class="btn btn-warning">
-            </form>
-        </div>
-    </div>
-</div> --}}
-<!-- ============================================================== -->
-
-
 
 @endsection
 

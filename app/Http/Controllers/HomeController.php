@@ -22,6 +22,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+        // $salesYearMonthComparisonChart = SELF::SalesYearMonthComparisonChart();
         $pageTitle = 'Dashboard';
 
         $salesds = Sale::orderBy('dateofsale', 'DESC')->get()
@@ -175,15 +176,7 @@ class HomeController extends Controller
         $totalSaleAmount = $query->sum('amount');
         $totalSales = $query->count();
 
-        // $totalSales = $query->get();
-        // foreach ($totalSales as $key => $value) {
-        //     dump($value->dateofsale);
-        // }
-        // dd('ok');
-
         session(['totalEmployees' => $totalEmployees]);
-
-        // dump(Config::get('constants.ADMIN_NAME'));
 
         $currentMonth = date('m');
         $currentYear = date('Y');
@@ -194,7 +187,6 @@ class HomeController extends Controller
                                 ->whereYear('dateofsale', $currentYear)
                                 ->sum('amount');
 
-        // dd($lastMonthAmount);
         Session::put('thisMonthAmount',$thisMonthAmount);
         Session::put('lastMonthAmount',$lastMonthAmount);
 
@@ -207,11 +199,9 @@ class HomeController extends Controller
         }else{
             $selectedYear = $request->selectYear;
         }
-        // dump($selectedYear);
         $total_Employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])->count();
 
         for($j=0; $j<$total_Employees; $j++){
-            // dump($employees[$j]->id);
             for ($i=0; $i<=11; $i++){
                 $salePerMonth[$j][$i] = Sale::whereYear('dateofsale',$selectedYear )
                 ->whereMonth('dateofsale', $i+1)
@@ -228,10 +218,7 @@ class HomeController extends Controller
             ];
             array_push($datasets, $dataset);
         }
-        // dump($datasets);
-        // dump($salePerMonth[0]);
-        // dd('ok');
-
+        dd($datasets);
         $chartjs = app()->chartjs
         ->name('lineChartTest')
         ->type('bar')
@@ -288,10 +275,36 @@ class HomeController extends Controller
             'years',
             'selectedempname',
             'saleTypeName',
-            'defaultdata'
+            'defaultdata',
+            // 'salesYearMonthComparisonChart'
         ));
     }
 
+    public function SalesYearMonthComparisonChart()
+    {
+        // Fetch data from the database
+        $salesData = Sale::selectRaw('SUM(amount) as total_amount, MONTH(dateofsale) as month')
+                         ->groupBy('month')
+                         ->orderBy('month')
+                         ->get();
+
+        // Extracting data for the chart
+        $labels = [];
+        $data = [];
+
+        foreach ($salesData as $sale) {
+            $labels[] = date('F', mktime(0, 0, 0, $sale->month, 1));
+            $data[] = $sale->total_amount;
+        }
+
+        // Setting up the chart dataset
+        $this->labels($labels)
+             ->dataset('Total Sales', 'line', $data)
+             ->options([
+                 'responsive' => true,
+                 // Add other Chart.js options as needed
+             ]);
+    }
 
     public function getrange(Request $request){
 
