@@ -6,10 +6,12 @@ use App\Models\Sale;
 use App\Models\Employee;
 use App\Models\Saletype;
 use App\Models\Commission;
+use App\Models\CommissionRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class SaleController extends Controller
 {
@@ -42,9 +44,9 @@ class SaleController extends Controller
         ->groupBy(function($val) {
             return Carbon::parse($val->dateofsale)->format('Y');
         });
-        
+
         $years = [];
-        
+
         foreach ($salesds as $key => $year) {
             // array_unshift($years, $key);
             array_push($years, $key);
@@ -105,9 +107,9 @@ class SaleController extends Controller
         ->groupBy(function($val) {
             return Carbon::parse($val->dateofsale)->format('Y');
         });
-        
+
         $years = [];
-        
+
         foreach ($salesds as $key => $year) {
             // array_unshift($years, $key);
             array_push($years, $key);
@@ -133,9 +135,9 @@ class SaleController extends Controller
         $salesds = Sale::orderBy('dateofsale', 'DESC')->get()->groupBy(function($val) {
             return Carbon::parse($val->dateofsale)->format('Y');
         });
-        
+
         $years = [];
-        
+
         foreach ($salesds as $key => $year) {
             array_unshift($years, $key);
         }
@@ -146,7 +148,7 @@ class SaleController extends Controller
             $employee_id = $request->employee_id;
             $employeeName = Employee::where('id',$request->employee_id)->first();
         }
-        
+
         $query->when(request('employee_id') != 'all', function ($q) {
             return $q->where('employee_id', request('employee_id'));
         });
@@ -155,7 +157,7 @@ class SaleController extends Controller
             $saletype_id = $request->saletype_id;
             $saleTypeName = Saletype::where('id',$request->saletype_id)->first();
         }
-        
+
         $query->when(request('saletype_id') != 'all', function ($q) {
             return $q->where('saletype_id', request('saletype_id'));
         });
@@ -238,7 +240,7 @@ class SaleController extends Controller
         $saletypes = Saletype::where(['deleted_at'=>NULL])
            ->orderBy('id', 'desc')
            ->get();
-        
+
         $selectedReportYear = date('Y');
         $selectedReportMonth = date('m');
            return view('admin.sale.index', compact(
@@ -309,19 +311,30 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         $validators = $request->validate([
-            'amount'=>'required',
-            'jobnumber'=>'integer|required|unique:sales',
-            'dateofsale'=>'required'
+            'amount' => 'required',
+            'jobnumber' => 'integer|required|unique:sales',
+            'dateofsale' => 'required'
         ]);
 
-        $employee = Employee::where('id', $request->employee_id)->first();
+        // If commission_rate_id is provided, use it, otherwise fall back to employee's commission
+        if ($request->has('commission_rate_id')) {
+            $commissionRate = CommissionRate::findOrFail($request->commission_rate_id);
+            $commission = ($request->amount) / 100 * $commissionRate->rate;
+            $commission_rate_id = $request->commission_rate_id;
+        } else {
+            $employee = Employee::where('id', $request->employee_id)->first();
+            $commission = ($request->amount) / 100 * $employee->commission;
+            $commission_rate_id = null;
+        }
+
         $sale = Sale::create([
             'amount' => $request->amount,
-            'jobnumber'=>$request->jobnumber,
-            'dateofsale'=>$request->dateofsale,
-            'employee_id'=>$request->employee_id,
-            'saletype_id'=>$request->saletype_id,
-            'commission' => ($request->amount)/100*$employee->commission
+            'jobnumber' => $request->jobnumber,
+            'dateofsale' => $request->dateofsale,
+            'employee_id' => $request->employee_id,
+            'saletype_id' => $request->saletype_id,
+            'commission_rate_id' => $commission_rate_id,
+            'commission' => $commission
         ]);
 
         if($sale){
@@ -334,19 +347,29 @@ class SaleController extends Controller
     public function update(Request $request, Sale $sale)
     {
         $validators = $request->validate([
-            'amount'=>'required',
-            'jobnumber' => 'required|unique:sales,jobnumber,'.$sale->jobnumber.',jobnumber',
-            'dateofsale'=>'required'
+            'amount' => 'required',
+            'jobnumber' => 'required|unique:sales,jobnumber,' . $sale->jobnumber . ',jobnumber',
+            'dateofsale' => 'required'
         ]);
 
-        $employee = Employee::where('id', $request->employee_id)->first();
+        // If commission_rate_id is provided, use it, otherwise fall back to employee's commission
+        if ($request->has('commission_rate_id')) {
+            $commissionRate = CommissionRate::findOrFail($request->commission_rate_id);
+            $commission = ($request->amount) / 100 * $commissionRate->rate;
+            $commission_rate_id = $request->commission_rate_id;
+        } else {
+            $employee = Employee::where('id', $request->employee_id)->first();
+            $commission = ($request->amount) / 100 * $employee->commission;
+            $commission_rate_id = null;
+        }
 
         $sale->amount = $request->amount;
         $sale->jobnumber = $request->jobnumber;
         $sale->dateofsale = $request->dateofsale;
         $sale->employee_id = $request->employee_id;
         $sale->saletype_id = $request->saletype_id;
-        $sale->commission = ($request->amount)/100*$employee->commission;
+        $sale->commission_rate_id = $commission_rate_id;
+        $sale->commission = $commission;
 
         if($sale->save())
             return redirect(route('admin.sale.index'))
@@ -365,6 +388,63 @@ class SaleController extends Controller
             ->with('message','Record Successfully Deleted!');
         }else{
             return back()->with('message','Error Deleting Record');
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Sale  $sale
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Sale $sale)
+    {
+        $pageTitle = 'Sale Details';
+        return view('admin.sale.show', compact('sale', 'pageTitle'));
+    }
+
+    public function getCommissionRates(Request $request)
+    {
+        try {
+            $employeeId = $request->employee_id;
+
+            // Log the incoming employee ID
+            Log::info('Fetching commission rates for employee ID: ' . $employeeId);
+
+            if (!$employeeId) {
+                return response()->json(['error' => 'Employee ID is required'], 400);
+            }
+
+            // Check if the employee exists
+            $employee = Employee::find($employeeId);
+            if (!$employee) {
+                Log::warning('Employee not found for ID: ' . $employeeId);
+                return response()->json(['error' => 'Employee not found'], 404);
+            }
+
+            $commissionRates = CommissionRate::where('employee_id', $employeeId)
+                ->whereNull('deleted_at')
+                ->select('id', 'name', 'rate')
+                ->get();
+
+            if ($commissionRates->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                    'message' => 'No commission rates found for this employee'
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $commissionRates
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching commission rates: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching commission rates'
+            ], 500);
         }
     }
 }

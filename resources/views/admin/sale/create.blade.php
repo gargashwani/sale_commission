@@ -14,22 +14,29 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label for="">* Select Employee</label>
-                                    <select name="employee_id" id="" class="form-control" required>
-                                        <option selected value="">Select an employee</option>
+                                    <select name="employee_id" id="employee_id" class="form-control" required>
+                                        <option value="">Select Employee</option>
                                         @foreach ($employees as $employee)
-                                            <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <label for="">* Sale Type</label>
                                 <select name="saletype_id" id="saletype_id" class="form-control" required>
-                                    <option selected value="">Select sale type</option>
+                                    <option value="">Select Sale Type</option>
                                     @foreach ($saletypes as $saletype)
-                                        <option value="{{$saletype->id}}">{{$saletype->name}}</option>
+                                        <option value="{{ $saletype->id }}">{{ $saletype->name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="">Commission Rate (Optional)</label>
+                                <select name="commission_rate_id" id="commission_rate_id" class="form-control">
+                                    <option value="">Select Commission Rate</option>
+                                </select>
+                                <small class="text-muted">If not selected, will use employee's default commission rate</small>
                             </div>
                             <div class="col-2">
                                 <label for="">* Date of Sale</label>
@@ -102,5 +109,41 @@ function confirmDelete(id){
     }
 }
 </script>
+
+<script>
+    $(document).ready(function() {
+        $('#employee_id').change(function() {
+            var employeeId = $(this).val();
+            if (employeeId) {
+                $.ajax({
+                    url: "{{ route('sale.getCommissionRates') }}",
+                    type: "GET",
+                    data: { employee_id: employeeId },
+                    success: function(response) {
+                        $('#commission_rate_id').empty();
+                        $('#commission_rate_id').append('<option value="">Select Commission Rate</option>');
+
+                        if (response.success && response.data.length > 0) {
+                            $.each(response.data, function(key, value) {
+                                $('#commission_rate_id').append('<option value="' + value.id + '">' + value.name + ' (' + value.rate + '%)</option>');
+                            });
+                        } else {
+                            $('#commission_rate_id').append('<option value="">No commission rates found</option>');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching commission rates:', xhr.responseText);
+                        $('#commission_rate_id').empty();
+                        $('#commission_rate_id').append('<option value="">Error loading commission rates</option>');
+                    }
+                });
+            } else {
+                $('#commission_rate_id').empty();
+                $('#commission_rate_id').append('<option value="">Select Commission Rate</option>');
+            }
+        });
+    });
+</script>
+
 
 @endsection

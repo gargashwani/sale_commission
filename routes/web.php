@@ -7,6 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaletypeController;
+use App\Http\Controllers\CommissionRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,4 +62,7 @@ Route::group(['as'=>'admin.', 'middleware'=>['auth'], 'prefix'=>'admin'], functi
 	Route::resource('/sale',SaleController::class);
     Route::post('/sale/report_filter', [SaleController::class, 'report_filter'])->name('sale.report_filter');
 	Route::resource('/saletype',SaletypeController::class);
+
+
+    Route::resource('/commission_rate', CommissionRateController::class);
 });

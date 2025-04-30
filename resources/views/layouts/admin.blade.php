@@ -33,6 +33,8 @@
     <link href="{{asset('material/css/colors/blue.css')}}" id="theme" rel="stylesheet">
     <!-- toast CSS -->
     <link href="{{asset('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">
+    <!-- Material Design Icons -->
+    <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -171,6 +173,7 @@
                             </ul>
                         </li> --}}
 <li><a class="waves-effect waves-dark" href="{{route('admin.saletype.index')}}"><i class="mdi mdi-gauge"></i>   Sale Types</a></li>
+<li><a class="waves-effect waves-dark" href="{{route('admin.commission_rate.index')}}"><i class="mdi mdi-cash-multiple"></i>   Commission Rates</a></li>
                         {{-- <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span
                                     class="hide-menu">Sale Types </span></a>
                             <ul aria-expanded="false" class="collapse">
