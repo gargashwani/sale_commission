@@ -227,11 +227,46 @@ class SaleController extends Controller
             });
         }
 
+        // Get the base query results
+        $sales = $query->get();
+
+        // Get commission rate breakdowns
+        $commissionBreakdowns = [];
+        if ($request->employee_id != 'all') {
+            $employee = Employee::find($request->employee_id);
+            if ($employee) {
+                // Get all commission rates for this employee
+                $commissionRates = CommissionRate::where('employee_id', $employee->id)
+                    ->whereNull('deleted_at')
+                    ->get();
+
+                // Calculate totals for each commission rate
+                foreach ($commissionRates as $rate) {
+                    $rateSales = $sales->where('commission_rate_id', $rate->id);
+                    $commissionBreakdowns[$rate->name] = [
+                        'rate' => $rate->rate,
+                        'total_sales' => $rateSales->count(),
+                        'total_amount' => $rateSales->sum('amount'),
+                        'total_commission' => $rateSales->sum('commission')
+                    ];
+                }
+
+                // Add default commission rate (from employee table)
+                $defaultSales = $sales->whereNull('commission_rate_id');
+                if ($defaultSales->count() > 0) {
+                    $commissionBreakdowns['Default Rate'] = [
+                        'rate' => $employee->commission,
+                        'total_sales' => $defaultSales->count(),
+                        'total_amount' => $defaultSales->sum('amount'),
+                        'total_commission' => $defaultSales->sum('commission')
+                    ];
+                }
+            }
+        }
+
         $totalCommission = $query->sum('commission');
         $totalSaleAmount = $query->sum('amount');
         $totalSales = $query->count();
-
-        $sales = $query->get();
 
         $pageTitle = 'Sales';
         $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
@@ -267,7 +302,8 @@ class SaleController extends Controller
             'toDate',
             'range',
             'selectedReportYear',
-            'selectedReportMonth'
+            'selectedReportMonth',
+            'commissionBreakdowns'
         ));
 
     }
@@ -342,6 +378,25 @@ class SaleController extends Controller
         }else{
             return back()->withErrors($validators);
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Sale  $sale
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Sale $sale)
+    {
+        $pageTitle = 'Edit Sale';
+        $employees = Employee::where(['status'=> 1,'deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+        $saletypes = Saletype::where(['deleted_at'=>NULL])
+           ->orderBy('id', 'desc')
+           ->get();
+
+        return view('admin.sale.edit', compact('sale', 'pageTitle', 'employees', 'saletypes'));
     }
 
     public function update(Request $request, Sale $sale)

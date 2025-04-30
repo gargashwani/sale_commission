@@ -150,7 +150,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label for="">Select Employee</label>
-                    <select name="employee_id" id="" class="" required="TRUE">
+                    <select name="employee_id" id="" class="form-control" required="TRUE">
                         <option value="all" >All</option>
                         @foreach ($employees as $employee)
                             {{-- @if(@$employee_id == $employee->id)
@@ -163,7 +163,7 @@
             </div>
             <div class="col-2">
                 <label for="">Sale Type</label>
-                <select name="saletype_id" id="saletype_id" class="" required="TRUE">
+                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
                     <option value="all" selected>All selected</option>
                     @foreach ($saletypes as $saletype)
                         {{-- @if(@$saletype_id == $saletype->id)
@@ -280,7 +280,7 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                                 <option value="{{$year}}">{{$year}}</option>
                             @endif
                         @endforeach
-                    
+
 
                         </select>
                         <select name="selectedReportMonth">
@@ -304,113 +304,44 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                     <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Job Number</th>
+                                <th>Date</th>
                                 <th>Employee</th>
-                                <th>SaleType</th>
-                                <th>DOS</th>
-                                <th>Sale</th>
-                                <th>Commission</th>
-                                <th>Revenue</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Comm Rate Name</th>
+                                <th>Comm Rate %</th>
+                                <th>Comm</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tfoot>
-                            <tr>
-                                <th>Job Number</th>
-                                <th>Employee</th>
-                                <th>SaleType</th>
-                                <th>DOS</th>
-                                <th>Sale</th>
-                                <th>Commission</th>
-                                <th>Revenue</th>
-                                <th>Actions</th>
+                            <tr class="font-weight-bold">
+                                <td colspan="3">Totals</td>
+                                <td>${{ number_format($totalSaleAmount, 2) }}</td>
+                                <td colspan="2"></td>
+                                <td>${{ number_format($totalCommission, 2) }}</td>
+                                <td></td>
                             </tr>
                         </tfoot>
                         <tbody>
-                            @php
-                                $i = 1;
-                            @endphp
-                            @foreach ($sales as $sale)
+                            @foreach($sales as $sale)
                                 <tr>
-                                    <td>{{ $sale->jobnumber }}</td>
-                                    <td>{{ @$sale->employee->name }}</td>
-                                    <td>{{ @$sale->saletype->name }}</td>
-                                    <td>{{ date('d-m-Y', strtotime($sale->dateofsale)) }}</td>
-                                    <td>{{ number_format($sale->amount,2) }}</td>
-                                    <td>{{ number_format($sale->commission,2) }}</td>
-                                    <td>{{ number_format($sale->amount - $sale->commission,2) }}</td>
-
+                                    <td>{{ date('Y-m-d', strtotime($sale->dateofsale)) }}</td>
+                                    <td>{{ $sale->employee->name }}</td>
+                                    <td>{{ $sale->customer->name ?? 'N/A' }}</td>
+                                    <td>${{ number_format($sale->amount, 2) }}</td>
+                                    <td>{{ $sale->commission_rate_id ? $sale->commissionRate->name : 'Default Rate' }}</td>
+                                    <td>{{ $sale->commission_rate_id ? number_format($sale->commissionRate->rate, 2) : number_format($sale->employee->commission, 2) }}%</td>
+                                    <td>${{ number_format($sale->commission, 2) }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#updatesale{{$sale->id}}" data-whatever="@mdo">Edit</button>
-                                        <div class="modal fade" id="updatesale{{$sale->id}}" tabindex="-1" role="dialog" aria-labelledby="updatesale{{$sale->id}}Label1">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="updatesale{{$sale->id}}Label1">Update sale</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    </div>
-                                                    <form method="POST" action="{{route('admin.sale.update', $sale)}}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-4">
-                                                                <div class="form-group">
-                                                                    <label for="">* Select Employee</label><br>
-                                                                    <select name="employee_id" id="" class="form-control" required="TRUE">
-                                                                        @foreach ($employees as $employee)
-                                                                            <option value="{{$employee->id}}">{{$employee->name}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <label for="">* Sale Type</label><br>
-                                                                <select name="saletype_id" id="saletype_id" class="form-control" required="TRUE">
-                                                                    <option value="{{@$sale->saletype->id}}"selected>
-                                                                        {{@$sale->saletype->name}}</option>
-                                                                    @foreach ($saletypes as $saletype)
-                                                                        <option value="{{$saletype->id}}">{{$saletype->name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <label for="">* Date of Sale</label><br>
-                                                                <input type="date" name="dateofsale" class="form-control"  value="{{$sale->dateofsale}}" id="mdate" data-dtp="dtp_GJMLm" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <label for="">* Job Number</label><br>
-                                                                <input type="number" name="jobnumber" class="form-control" required  value="{{$sale->jobnumber}}">
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label for="">* Amount</label><br>
-                                                            <input type="number" name="amount" class="form-control" step="any"  required value="{{$sale->amount}}">
-                                                            </div>
-                                                        </div>
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                            <input type="submit" class="btn btn-primary" value="Update sale">
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{$sale->id}}')">Delete</a>
-                                            <form id="delete-sale-{{$sale->id}}"
-                                                action="{{ route('admin.sale.destroy', $sale->id) }}"
-                                                method="POST" style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                        <a href="{{ route('admin.sale.edit', $sale->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                        <form action="{{ route('admin.sale.destroy', $sale->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this sale?')">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
-                                @php
-                                    $i++;
-                                @endphp
                             @endforeach
                         </tbody>
                     </table>
