@@ -346,6 +346,36 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                         </tbody>
                     </table>
                 </div>
+
+                @if(isset($commissionBreakdowns) && !empty($commissionBreakdowns))
+                <div class="mt-4">
+                    <h4>Commission Rate Breakdown</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Commission Rate Name</th>
+                                    <th>Rate</th>
+                                    <th>Total Sales</th>
+                                    <th>Total Amount</th>
+                                    <th>Total Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($commissionBreakdowns as $name => $breakdown)
+                                <tr>
+                                    <td>{{ $name }}</td>
+                                    <td>{{ number_format($breakdown['rate'], 2) }}%</td>
+                                    <td>{{ number_format($breakdown['total_sales']) }}</td>
+                                    <td>${{ number_format($breakdown['total_amount'], 2) }}</td>
+                                    <td>${{ number_format($breakdown['total_commission'], 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 

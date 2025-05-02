@@ -346,37 +346,47 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        $validators = $request->validate([
-            'amount' => 'required',
-            'jobnumber' => 'integer|required|unique:sales',
-            'dateofsale' => 'required'
-        ]);
+        try {
+            $validators = $request->validate([
+                'amount' => 'required',
+                'jobnumber' => 'integer|required|unique:sales',
+                'dateofsale' => 'required',
+                'employee_id' => 'required|exists:employees,id',
+                'saletype_id' => 'required|exists:saletypes,id'
+            ]);
 
-        // If commission_rate_id is provided, use it, otherwise fall back to employee's commission
-        if ($request->has('commission_rate_id')) {
-            $commissionRate = CommissionRate::findOrFail($request->commission_rate_id);
-            $commission = ($request->amount) / 100 * $commissionRate->rate;
-            $commission_rate_id = $request->commission_rate_id;
-        } else {
-            $employee = Employee::where('id', $request->employee_id)->first();
-            $commission = ($request->amount) / 100 * $employee->commission;
-            $commission_rate_id = null;
-        }
+            // Get the employee
+            $employee = Employee::findOrFail($request->employee_id);
+            // If commission_rate_id is provided, use it, otherwise fall back to employee's commission
+            if ($request->commission_rate_id) {
+                $commissionRate = CommissionRate::findOrFail($request->commission_rate_id);
+                $commission = ($request->amount) / 100 * $commissionRate->rate;
+                $commission_rate_id = $request->commission_rate_id;
+            } else {
+                // Use employee's default commission rate
+                $commission = ($request->amount) / 100 * $employee->commission;
+                $commission_rate_id = null;
+            }
 
-        $sale = Sale::create([
-            'amount' => $request->amount,
-            'jobnumber' => $request->jobnumber,
-            'dateofsale' => $request->dateofsale,
-            'employee_id' => $request->employee_id,
-            'saletype_id' => $request->saletype_id,
-            'commission_rate_id' => $commission_rate_id,
-            'commission' => $commission
-        ]);
+            $sale = Sale::create([
+                'amount' => $request->amount,
+                'jobnumber' => $request->jobnumber,
+                'dateofsale' => $request->dateofsale,
+                'employee_id' => $request->employee_id,
+                'saletype_id' => $request->saletype_id,
+                'commission_rate_id' => $commission_rate_id,
+                'commission' => $commission
+            ]);
 
-        if($sale){
-            return back()->with('message','Record added successfully!');
-        }else{
-            return back()->withErrors($validators);
+            if($sale){
+                return redirect()->route('admin.sale.index')->with('message','Record added successfully!');
+            }else{
+                return back()->withErrors($validators);
+            }
+        } catch (\Exception $e) {
+            dd($e);
+            Log::error('Error adding sale: ' . $e->getMessage());
+            return back()->withErrors($e->getMessage());
         }
     }
 
