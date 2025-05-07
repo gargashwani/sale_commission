@@ -304,9 +304,10 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                     <table id="myTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>Job Number</th>
                                 <th>Date</th>
                                 <th>Employee</th>
-                                <th>Customer</th>
+                                {{-- <th>Customer</th> --}}
                                 <th>Amount</th>
                                 <th>Comm Rate Name</th>
                                 <th>Comm Rate %</th>
@@ -326,9 +327,10 @@ Saletype - @if(@$saleTypeName != null) {{@$saleTypeName->name}} @else {!! 'all s
                         <tbody>
                             @foreach($sales as $sale)
                                 <tr>
+                                    <td>{{ $sale->jobnumber }}</td>
                                     <td>{{ date('Y-m-d', strtotime($sale->dateofsale)) }}</td>
                                     <td>{{ $sale->employee->name }}</td>
-                                    <td>{{ $sale->customer->name ?? 'N/A' }}</td>
+                                    {{-- <td>{{ $sale->customer->name ?? 'N/A' }}</td> --}}
                                     <td>${{ number_format($sale->amount, 2) }}</td>
                                     <td>{{ $sale->commission_rate_id ? $sale->commissionRate->name : 'Default Rate' }}</td>
                                     <td>{{ $sale->commission_rate_id ? number_format($sale->commissionRate->rate, 2) : number_format($sale->employee->commission, 2) }}%</td>
